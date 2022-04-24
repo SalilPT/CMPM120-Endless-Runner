@@ -7,11 +7,17 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('orange', './assets/orangeA.png');
-        this.load.image('green', './assets/greenA.png');
+        this.load.image('promtedArrow', './assets/orangeA.png');
+        this.load.image('passedArrow', './assets/greenA.png');
     }
 
     create() {
+        //define keys
+        upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+        rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+
         this.startEncounter(100, 100);
         // Initiate variables to use
 
@@ -20,6 +26,7 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+        
         // Check collisions using Arcade Physics
 
         // Update current onscreen and offscreen platforms
@@ -46,20 +53,32 @@ class Play extends Phaser.Scene {
     spawnCollectible() {
 
     }
-
+ 
     // Start encounter with obstacle
     startEncounter(x, y) { // x,y coordinates of where the arrows apear horizontally
-        //add sprites to the scene
-        this.Arrow1 = new KeyComboArrow(this, x, y, 'orange', 0);
+        let CorrectInputNum = 0;
+        //add sprites to the scene 
+        this.Arrow1 = new KeyComboArrow(this, x, y, 'promtedArrow', 0); // dont set origin to (0,0) or rotation wont work properly
         this.Arrow1.rotateArrow(); // randomly rotate the arrow by either 0, 90, 180, or 270 degrees
-        this.Arrow2 = new KeyComboArrow(this, x + this.Arrow1.width + this.Arrow1.width/10, y, 'orange', 0);
+        this.Arrow2 = new KeyComboArrow(this, x + this.Arrow1.width + this.Arrow1.width/10, y, 'promtedArrow', 0);
         this.Arrow2.rotateArrow();
-        this.Arrow3 = new KeyComboArrow(this, x + (this.Arrow1.width*2) + (this.Arrow1.width/10)*2, y, 'orange', 0);
+        this.Arrow3 = new KeyComboArrow(this, x + (this.Arrow1.width*2) + (this.Arrow1.width/10)*2, y, 'promtedArrow', 0);
         this.Arrow3.rotateArrow();
-        this.Arrow4 = new KeyComboArrow(this, x + (this.Arrow1.width*3) + (this.Arrow1.width/10)*3, y, 'orange', 0);
+        this.Arrow4 = new KeyComboArrow(this, x + (this.Arrow1.width*3) + (this.Arrow1.width/10)*3, y, 'promtedArrow', 0);
         this.Arrow4.rotateArrow();
-        
-        
+        // create a keycombo based on the current orientation of the randomly rotated keys
+        let keyComboNeeded = this.input.keyboard.createCombo([this.Arrow1.getDirection(), this.Arrow2.getDirection(), this.Arrow3.getDirection(), this.Arrow4.getDirection()], {
+            resetOnWrongKey: true,  // if they press the wrong key is the combo reset?
+            maxKeyDelay: 0,         // max delay (ms) between each key press (0 = disabled)
+            deleteOnMatch: true    // if combo matches, will it delete itself?
+        });
+        // watch for keycombomatches
+        this.input.keyboard.on('keycombomatch', (combo, event) => {
+            if (combo === keyComboNeeded) { 
+                console.log('correct combo was put in')
+            }
+        });
+
     }
 
     // Spawn empty streatch of platforms before obstacle encounter
