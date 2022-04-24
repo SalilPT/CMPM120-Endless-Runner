@@ -21,6 +21,7 @@ class Menu extends Phaser.Scene {
         // Place menu buttons
 
         // Assign events for when buttons are clicked
+        this.scene.start('playScene');
 
         // Play background music
 

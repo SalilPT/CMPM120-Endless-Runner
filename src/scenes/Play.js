@@ -4,13 +4,19 @@ class Play extends Phaser.Scene {
     }
     
     init() {
+    }
 
+    preload() {
+        this.load.image('orange', './assets/orangeA.png');
+        this.load.image('green', './assets/greenA.png');
     }
 
     create() {
+        this.startEncounter(100, 100);
         // Initiate variables to use
 
         // Place tile sprites
+
     }
 
     update() {
@@ -42,8 +48,18 @@ class Play extends Phaser.Scene {
     }
 
     // Start encounter with obstacle
-    startEncounter() {
-
+    startEncounter(x, y) { // x,y coordinates of where the arrows apear horizontally
+        //add sprites to the scene
+        this.Arrow1 = new KeyComboArrow(this, x, y, 'orange', 0);
+        this.Arrow1.rotateArrow(); // randomly rotate the arrow by either 0, 90, 180, or 270 degrees
+        this.Arrow2 = new KeyComboArrow(this, x + this.Arrow1.width + this.Arrow1.width/10, y, 'orange', 0);
+        this.Arrow2.rotateArrow();
+        this.Arrow3 = new KeyComboArrow(this, x + (this.Arrow1.width*2) + (this.Arrow1.width/10)*2, y, 'orange', 0);
+        this.Arrow3.rotateArrow();
+        this.Arrow4 = new KeyComboArrow(this, x + (this.Arrow1.width*3) + (this.Arrow1.width/10)*3, y, 'orange', 0);
+        this.Arrow4.rotateArrow();
+        
+        
     }
 
     // Spawn empty streatch of platforms before obstacle encounter
@@ -59,4 +75,5 @@ class Play extends Phaser.Scene {
 
         // Return control to player
     }
+    
 }
