@@ -1,3 +1,3 @@
-class Platform extends Phaser.GameObjects.Sprite {
+class Platform extends Phaser.Physics.Arcade.Sprite {
 
 }

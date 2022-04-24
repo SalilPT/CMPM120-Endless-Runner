@@ -1,6 +1,9 @@
-class Scientist extends Phaser.GameObjects.Sprite {
+class Scientist extends Phaser.Physics.Arcade.Sprite {
     constructor(params) {
-
+        super(params.scene, params.x, params.y, params.texture, params.frame);
+        // Add graphics that's displayed and the physics body
+        params.scene.add.existing(this);
+        params.scene.physics.add.existing(this);
     }
 
     update() {
