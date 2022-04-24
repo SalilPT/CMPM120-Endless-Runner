@@ -1,5 +1,5 @@
 class KeyComboArrow extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, frame, position) {
+    constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
         scene.add.existing(this);
@@ -18,6 +18,7 @@ class KeyComboArrow extends Phaser.GameObjects.Sprite {
         }
     }
 
+    // returns the correspoding key input based on the rotation of the arrow
     getDirection() {
         console.log(this.angle);
         if (this.angle == 0){
@@ -29,5 +30,10 @@ class KeyComboArrow extends Phaser.GameObjects.Sprite {
         } else if (this.angle == -90) {
             return leftKey;
         }
+    }
+
+    // change the sprite to indicate the arrow in the combo was guessed correctly
+    changeToPassingSprite(){
+        this.setTexture('passedArrow',0);
     }
 }

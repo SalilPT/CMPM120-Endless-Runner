@@ -59,7 +59,7 @@ class Play extends Phaser.Scene {
         let CorrectInputNum = 0;
         //add sprites to the scene 
         this.Arrow1 = new KeyComboArrow(this, x, y, 'promtedArrow', 0); // dont set origin to (0,0) or rotation wont work properly
-        this.Arrow1.rotateArrow(); // randomly rotate the arrow by either 0, 90, 180, or 270 degrees
+        this.Arrow1.rotateArrow();
         this.Arrow2 = new KeyComboArrow(this, x + this.Arrow1.width + this.Arrow1.width/10, y, 'promtedArrow', 0);
         this.Arrow2.rotateArrow();
         this.Arrow3 = new KeyComboArrow(this, x + (this.Arrow1.width*2) + (this.Arrow1.width/10)*2, y, 'promtedArrow', 0);
@@ -75,7 +75,11 @@ class Play extends Phaser.Scene {
         // watch for keycombomatches
         this.input.keyboard.on('keycombomatch', (combo, event) => {
             if (combo === keyComboNeeded) { 
-                console.log('correct combo was put in')
+                console.log('change arrow sprites to their passed sprite')
+                this.Arrow1.changeToPassingSprite();
+                this.Arrow2.changeToPassingSprite();
+                this.Arrow3.changeToPassingSprite();
+                this.Arrow4.changeToPassingSprite();
             }
         });
 
@@ -88,6 +92,11 @@ class Play extends Phaser.Scene {
 
     // After a successful key combo, play animation to move onto the next level of scaffolding
     playJumpingToNextLevelAnim() {
+        // destroy arrow sprites
+        this.Arrow1.destroy();
+        this.Arrow2.destroy();
+        this.Arrow3.destroy();
+        this.Arrow4.destroy();
         // Turn off player control
 
         // Play animation and wait for it to finish
