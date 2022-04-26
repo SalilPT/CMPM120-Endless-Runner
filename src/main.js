@@ -17,3 +17,4 @@ let globalGameConfig = {
 }
 
 let globalGame = new Phaser.Game(globalGameConfig);
+let upKey, downKey, rightKey, leftKey;

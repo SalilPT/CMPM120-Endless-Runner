@@ -25,7 +25,10 @@ class Menu extends Phaser.Scene {
         // Place menu buttons
 
         // Assign events for when buttons are clicked
-
+        upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+        rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         // Play background music
 
     }
