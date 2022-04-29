@@ -16,10 +16,12 @@ class Play extends Phaser.Scene {
         Initiate variables to use
         */
         this.platformSpawnXCoord = globalGame.config.width * 1.5;
+        //this.platformSpawnXCoord = globalGame.config.width * .76;
         // Platform pooling code adapted from code by Emanuele Feronato: https://www.emanueleferonato.com/2018/11/13/build-a-html5-endless-runner-with-phaser-in-a-few-lines-of-code-using-arcade-physics-and-featuring-object-pooling/ 
         this.activePlatformGroup = this.add.group(
             {
                 removeCallback: function (platform) {
+                    platform.body.setVelocity(0,0);
                     platform.scene.platformPool.add(platform)
                 }
             }
@@ -38,7 +40,6 @@ class Play extends Phaser.Scene {
         this.encounterActive = false;
         // Place tile sprites
         this.testPhysicsSprite = this.physics.add.sprite(globalGame.config.width/4, globalGame.config.height/2+40, "platform1");
-        //this.testPhysicsSprite.setSize(64, 8);
         this.testPhysicsSprite.setDisplaySize(32, 8);
         //console.log(this.testPhysicsSprite.height);
         this.testPhysicsSprite.destroy();
@@ -60,12 +61,14 @@ class Play extends Phaser.Scene {
         //this.playerChar.setVelocity(5,0);
         this.platform1BaseWidth = this.textures.get("platform1").getSourceImage().width;
         console.log(this.platform1BaseWidth);
-        this.defaultPlatformBodyHeight = 8;
+        this.defaultPlatformBodyHeight = this.textures.get("platform1").getSourceImage().height;;
         this.rightmostPlatform;
         this.createStartingPlatforms();
+        this.encounterActive = false;
         this.enemyTriggerPlatform;
+        this.leftBoundPlatformCutoff = -globalGame.config.width;
 
-
+        this.myTweenManager = new Phaser.Tweens.TweenManager(this);
 
 
 
@@ -78,8 +81,8 @@ class Play extends Phaser.Scene {
         console.log("playScene started");
         this.input.setGlobalTopOnly(true);
         
-        this.input.keyboard.on("keydown-RIGHT", () => {console.log("RIGHT"); this.currEnvScrollVel -= 1;});
-        this.input.keyboard.on("keydown-LEFT", () => {console.log("LEFT"); this.currEnvScrollVel += 1;});
+        this.input.keyboard.on("keydown-RIGHT", () => {console.log("RIGHT"); this.currEnvScrollVel -= 10 * !this.encounterActive;});
+        this.input.keyboard.on("keydown-LEFT", () => {console.log("LEFT"); this.currEnvScrollVel += 10 * !this.encounterActive;});
         this.input.keyboard.on("keydown-UP", () => {
             console.log("UP");})
         this.input.keyboard.on("keydown-DOWN", () => {
@@ -88,7 +91,7 @@ class Play extends Phaser.Scene {
         
         this.input.on("pointerdown", pointer => {
             console.log("Clicked in play");
-            this.currEnvScrollVel = -150;
+            this.currEnvScrollVel = -100;
             this.playerChar.setFriction(0);
             this.playerChar.setGravity(0, 400);
         });
@@ -97,7 +100,9 @@ class Play extends Phaser.Scene {
 
         this.obstacleTimerConfig = {
             delay: (5 + Math.random() * 5) * 1000,
-            callback: () => {this.startEncounter();}
+            callback: () => {this.startEncounter();
+
+            }
         }
         this.obstacleTimer = this.time.addEvent(this.obstacleTimerConfig);
 
@@ -109,19 +114,34 @@ class Play extends Phaser.Scene {
         // Check collisions using Arcade Physics
 
         // Update current onscreen and offscreen platforms
+        //this.currEnvScrollVel = this.currEnvScrollVel <= -1000 ? -100 : this.currEnvScrollVel - 500;
+        //console.log(this.platformPool.getLength(), this.activePlatformGroup.getLength());
+        //this.currEnvScrollVel = this.currEnvScrollVel == -1000 ? -1000 : -1000; // breaks spawning; might need to add upcoming platforms to group that gets updated after spawning
+                
         for (let platform of this.activePlatformGroup.getChildren()) {
-            if ((platform.x + platform.displayWidth) < 0) {
+            if ((platform.x + platform.displayWidth) < this.leftBoundPlatformCutoff) {
                 this.activePlatformGroup.killAndHide(platform);
                 this.activePlatformGroup.remove(platform);
                 continue;
             }
-            platform.setVelocityX(this.currEnvScrollVel);
+            platform.body.setVelocityX(this.currEnvScrollVel);
         }
+
+        let thing = false;
         while (
             (this.rightmostPlatform.x + this.rightmostPlatform.width) < this.platformSpawnXCoord
             && !this.encounterActive) {
-                this.spawnPlatform(this.rightmostPlatform.x + this.rightmostPlatform.width, this.platformSpawnYCoord);
+                console.log("???", this.rightmostPlatform.x + this.rightmostPlatform.width);
+                
+                console.assert(this.rightmostPlatform.body.x + this.rightmostPlatform.body.width === this.getPhysBounds(this.rightmostPlatform).right, "Platform check failed: " + (this.rightmostPlatform.body.x + this.rightmostPlatform.body.width) + " != " + this.getPhysBounds(this.rightmostPlatform).right);
+
+                thing = this.spawnPlatform(this.getPhysBounds(this.rightmostPlatform).right, this.platformSpawnYCoord);
+                
+                //console.log(thing.x);     
+                           
+
         }
+        
         // Move lava up
 
         // Update camera (currently just changes the positions on things onscreen)
@@ -149,16 +169,18 @@ class Play extends Phaser.Scene {
             && !this.obstacleInRange) {
                 this.currEnvScrollVel = 0;
                 this.obstacleInRange = true;
-                console.log("Hey")
-                this.placeKeyCombo(this.playerChar.x + 20, this.playerChar.y);
+
+                this.placeKeyCombo(this.playerChar.x - 96, globalGame.config.height * 0.75);
             }
             else if (this.enemyTriggerPlatform.x + this.enemyTriggerPlatform.width <= this.platformSpawnXCoord) {
                 
                 while ((this.rightmostPlatform.x + this.rightmostPlatform.width) < this.platformSpawnXCoord) {
-                        this.spawnPlatform(this.rightmostPlatform.x + this.rightmostPlatform.width, this.platformSpawnYCoord);
+                        this.spawnPlatform(this.getPhysBounds(this.rightmostPlatform).right, this.platformSpawnYCoord);
+
                 }
             }
         }
+        //this.currEnvScrollVel = this.currEnvScrollVel == -1000 ? -1000 : -1000; // breaks spawning; might need to add upcoming platforms to group that gets updated after spawning
     }
     
     // Spawn platform at provided position
@@ -167,22 +189,32 @@ class Play extends Phaser.Scene {
         // Check if a platform is in the pool first
         if (this.platformPool.getLength() > 0) {
             platformToSpawn = this.platformPool.getFirst();
-            platformToSpawn.setOrigin(0);
-            platformToSpawn.setX(x);
-            platformToSpawn.setY(y);
             platformToSpawn.setActive(true);
             platformToSpawn.setVisible(true);
+            
             this.platformPool.remove(platformToSpawn);
         }
         // If a platform can't be retrieved from the pool, create a new one
         else {
             platformToSpawn = this.physics.add.sprite(x, y, "platform1");
-            platformToSpawn.setOrigin(0);
-            platformToSpawn.setDisplaySize(platformToSpawn.body.width, this.defaultPlatformBodyHeight);
+            platformToSpawn.setDisplaySize(this.platform1BaseWidth, this.defaultPlatformBodyHeight);
             platformToSpawn.setPushable(false);
+
             this.activePlatformGroup.add(platformToSpawn);
+           
         }
+        platformToSpawn.setOrigin(0);
+        
+        // IMPORTANT SECTION
+        platformToSpawn.body.reset(x,y);
+        // Not sure if these two are necessary, but I'll keep them here anyway
+        platformToSpawn.body.x = x;
+        platformToSpawn.body.y = y;
+        //
+        
+        platformToSpawn.body.setVelocityX(this.currEnvScrollVel);
         this.rightmostPlatform = platformToSpawn;
+        //console.log("New platform x: " + platformToSpawn.x);
         return platformToSpawn;
     }
 
@@ -236,7 +268,7 @@ class Play extends Phaser.Scene {
                 if (this.obstacleInRange) {
                     this.encounterActive = false;
                     this.obstacleInRange = false;
-                    this.currEnvScrollVel = -150;
+                    this.currEnvScrollVel = -200;
                     this.playerChar.setVelocityY(-400);
                     this.obstacleTimer = this.time.addEvent(this.obstacleTimerConfig);
                 }
@@ -249,9 +281,11 @@ class Play extends Phaser.Scene {
     spawnEmptyStretchOfPlatforms(length = globalGame.config.width) {
         let numPlatformsToSpawn = Math.ceil(length / this.platform1BaseWidth);
         for (let i = 0; i < numPlatformsToSpawn - 1; i++) {
-            this.spawnPlatform(this.rightmostPlatform.x + this.rightmostPlatform.width, this.platformSpawnYCoord);
+            this.spawnPlatform(this.getPhysBounds(this.rightmostPlatform).right, this.platformSpawnYCoord);
         }
-        this.enemyTriggerPlatform = this.spawnPlatform(this.rightmostPlatform.x + this.rightmostPlatform.width, this.platformSpawnYCoord);
+        
+        this.enemyTriggerPlatform = this.spawnPlatform(this.getPhysBounds(this.rightmostPlatform).right, this.platformSpawnYCoord);
+        
     }
 
     // Create the platforms at the start of the game
@@ -264,6 +298,7 @@ class Play extends Phaser.Scene {
                 break;
             }
         }
+        console.log(this.rightmostPlatform.x + this.rightmostPlatform.width);
     }
 
     // After a successful key combo, play animation to move onto the next level of scaffolding
@@ -278,10 +313,16 @@ class Play extends Phaser.Scene {
         1000
         );
         // Turn off player control
-
+        
         // Play animation and wait for it to finish
 
         // Return control to player
     }
     
+    // Helper function to get the bounds of an Arcade Physics object's body
+    getPhysBounds(obj) {
+        let dummy_obj = {};
+        obj.body.getBounds(dummy_obj);
+        return dummy_obj;
+    }
 }
