@@ -3,6 +3,9 @@ class KeyComboArrow extends Phaser.GameObjects.Sprite {
         super(scene, x, y, texture, frame);
 
         scene.add.existing(this);
+
+        // Treat this as a HUD game object that doesn't move with the rest of the world
+        this.setScrollFactor(0);
     }
 
     // rotates the sprite randomly by 0, 90, 180, or 270
