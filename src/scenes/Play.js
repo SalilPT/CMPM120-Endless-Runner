@@ -70,7 +70,7 @@ class Play extends Phaser.Scene {
         //this.playerChar.setVelocity(5,0);
         this.platform1BaseWidth = this.textures.get("platform1").getSourceImage().width;
         console.log(this.platform1BaseWidth);
-        this.defaultPlatformBodyHeight = this.textures.get("platform1").getSourceImage().height;;
+        this.defaultPlatformBodyHeight = this.textures.get("platform1").getSourceImage().height;
         this.rightmostPlatform;
         this.createStartingPlatforms();
         this.encounterActive = false;
@@ -79,7 +79,7 @@ class Play extends Phaser.Scene {
 
         this.myTweenManager = new Phaser.Tweens.TweenManager(this);
 
-
+        this.playerAndPlatformCollider = this.physics.add.collider(this.playerChar, this.activePlatformGroup);
 
 
 
@@ -104,7 +104,7 @@ class Play extends Phaser.Scene {
             this.playerChar.setGravity(0, 400);
         });
 
-        this.playerAndPlatformCollider = this.physics.add.collider(this.playerChar, this.activePlatformGroup);
+        
 
         this.obstacleTimerConfig = {
             delay: (5 + Math.random() * 0) * 1000,
