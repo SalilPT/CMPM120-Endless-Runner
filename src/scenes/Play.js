@@ -56,9 +56,6 @@ class Play extends Phaser.Scene {
             frame: 0
         }
         this.playerChar = new Scientist(playerCharArgs).setOrigin(0.5);
-        this.playerChar.body.checkCollision.left = false;
-        this.playerChar.body.checkCollision.up = false;
-        this.playerChar.body.checkCollision.right = false;
         this.playerChar.setBounce(0);
         this.playerChar.setFriction(0);
         this.playerChar.playMenuBackgroundAnim();
@@ -83,7 +80,10 @@ class Play extends Phaser.Scene {
         this.collectibleGroup = this.physics.add.group({
             runChildUpdate: true    // run update method of all members in the group
         });
-
+        this.playerAndCollectibleCollider = this.physics.add.collider(this.playerChar, this.collectibleGroup, (object1, object2) => {
+            object2.destroy();
+        });
+        this.playerAndCollectibleCollider.overlapOnly = true;
 
 
 
