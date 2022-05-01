@@ -9,6 +9,7 @@ class Play extends Phaser.Scene {
     preload() {
         this.load.image('promtedArrow', './assets/orangeA.png');
         this.load.image('passedArrow', './assets/greenA.png');
+        this.load.image('collectible', './assets/purple crystal.png')
     }
 
     create() {
@@ -78,7 +79,10 @@ class Play extends Phaser.Scene {
         this.leftBoundPlatformCutoff = -globalGame.config.width;
 
         this.myTweenManager = new Phaser.Tweens.TweenManager(this);
-
+        // create group thata handles collectibles
+        this.collectibleGroup = this.physics.add.group({
+            runChildUpdate: true    // run update method of all members in the group
+        });
 
 
 
@@ -143,6 +147,10 @@ class Play extends Phaser.Scene {
                 console.assert(this.rightmostPlatform.body.x + this.rightmostPlatform.body.width === this.getPhysBounds(this.rightmostPlatform).right, "Platform check failed: " + (this.rightmostPlatform.body.x + this.rightmostPlatform.body.width) + " != " + this.getPhysBounds(this.rightmostPlatform).right);
 
                 this.spawnPlatform(this.getPhysBounds(this.rightmostPlatform).right, this.platformSpawnYCoord);
+                // spawn collectible relative to the platform being spawned and with randomized y coordinate above the platform
+                if (this.input.keyboard.enabled == true) {
+                    this.spawnCollectible(this.getPhysBounds(this.rightmostPlatform).right, this.randomCollectibleY());
+                }
 
         }
         
@@ -245,8 +253,20 @@ class Play extends Phaser.Scene {
     }
 
     // Spawn a collectible offscreen (Maybe with height from ground as parameter?)
-    spawnCollectible() {
+    spawnCollectible(X,Y) {
 
+        console.log('spawining collectibles')
+        let collectibleConfig = {
+            scene: this,
+            x: X,
+            y: Y,
+            texture:'collectible', 
+            frame: 0
+        }
+        // create new collectible
+        let spawnedCollectible = new Collectibles(collectibleConfig);
+        // add collectible to group
+        this.collectibleGroup.add(spawnedCollectible);
     }
  
     // Start encounter with obstacle
@@ -388,5 +408,10 @@ class Play extends Phaser.Scene {
             }
         );
         return newTimer;
+    }
+
+    // helper function to return random Y coordinate above the currentplatform height for collectibles
+    randomCollectibleY() {
+        return this.platformSpawnYCoord - this.textures.get("collectible").getSourceImage().height/3 - (Math.random() * (this.playerChar.height * 2));
     }
 }
