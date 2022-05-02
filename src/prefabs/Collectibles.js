@@ -8,11 +8,9 @@ class Collectibles extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
-        if (!this.scene.encounterActive) {
-            this.setVelocityX(this.scene.currEnvScrollXVel)
-            if (this.x <= 0 - this.width) {
-                this.destroy();
-            }
+        this.setVelocityX(this.scene.currEnvScrollXVel)
+        if (this.x <= 0 - this.width) {
+            this.destroy();
         }
     }
 
