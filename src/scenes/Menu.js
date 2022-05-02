@@ -15,15 +15,23 @@ class Menu extends Phaser.Scene {
         this.load.image("platform1", "./assets/Rock Platform 1 (Shadow)(128x74).png");
         this.load.image("scientist", "./assets/Jeb The Geologist temp file.png");
         // Load UI buttons
-
+        this.load.image("playButton", "./assets/janky play button.png")
         // Load audio assets
     }
 
     create() {
-        this.input.setGlobalTopOnly(true);
-        this.input.on("pointerdown", pointer => {console.log("Clicked in menu");});
-        setTimeout(() => {this.scene.launch("playScene"); this.scene.stop("menuScene")}, 0);
-        // Place menu buttons
+        this.playButton = this.add.sprite(globalGameConfig.width/2, globalGameConfig.height/1.5, "playButton");
+        this.playButton.setInteractive();
+        // put menu scene to the top of screen
+        this.scene.bringToTop();
+        // play button
+        this.playButton.on("pointerdown", () => {
+            console.log("Clicked on playButton in Menu scene");
+            this.scene.stop("menuScene")
+            // start the game
+            this.scene.get("playScene").startGameplay();
+        });
+        this.scene.launch("playScene");
 
         // Assign events for when buttons are clicked
         upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
