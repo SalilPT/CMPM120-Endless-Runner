@@ -7,7 +7,7 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('promtedArrow', './assets/orangeA.png');
+        this.load.image('promtedArrow', './assets/arrow 1.png');
         this.load.image('passedArrow', './assets/greenA.png');
         this.load.image('collectible', './assets/purple crystal.png')
     }
@@ -102,11 +102,12 @@ class Play extends Phaser.Scene {
             console.log("DOWN");
         });
         
-        this.input.on("pointerdown", pointer => {
+        // commented code below was replaced by startGamplay function that is called in menu scene
+        /*this.input.on("pointerdown", pointer => {
             console.log("Clicked in play");
             this.currEnvScrollXVel = -200;
             this.playerChar.setGravity(0, 400);
-        });
+        });*/
 
         this.playerAndPlatformCollider = this.physics.add.collider(this.playerChar, this.activePlatformGroup);
 
@@ -408,6 +409,12 @@ class Play extends Phaser.Scene {
             }
         );
         return newTimer;
+    }
+
+    startGameplay() {
+        console.log("start the gameplay");
+        this.currEnvScrollXVel = -200;
+        this.playerChar.setGravity(0, 400);
     }
 
     // helper function to return random Y coordinate above the currentplatform height for collectibles
