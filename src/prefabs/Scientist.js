@@ -4,6 +4,19 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
         // Add graphics that's displayed and the physics body
         params.scene.add.existing(this);
         params.scene.physics.add.existing(this);
+
+        // Set physics properties
+        this.setBounce(0);
+        this.setFriction(0);
+
+        // Animations
+        this.scene.anims.create({
+            key: "scientistRunning",
+            frames: this.anims.generateFrameNumbers("scientistRunningSpritesheet", {start: 0}),
+            frameRate: 12,
+            repeat: -1
+        });
+        
     }
 
     update() {
@@ -15,8 +28,12 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
 
     }
 
-    // After the play button is pressed, transition to running animation
-    transitionToRunningAnim() {
+    // Play running animation
+    playRunningAnim() {
+        this.anims.play("scientistRunning");
+    }
+
+    playJumpingAnim() {
 
     }
 

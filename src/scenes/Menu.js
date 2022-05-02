@@ -13,9 +13,11 @@ class Menu extends Phaser.Scene {
         this.load.spritesheet("lavaTop", "./assets/lava sprite sheet (4 frames) 512x50.png", {frameWidth: 512/4, frameHeight: 50});
         // Load assets for Platforms and Scientist
         this.load.image("platform1", "./assets/Rock Platform 1 (Shadow)(128x74).png");
-        this.load.image("scientist", "./assets/Jeb The Geologist temp file.png");
+        
+        this.load.spritesheet("scientist", "./assets/running spritesheet 64 pixels a frame.png", {frameWidth: 64});
+        this.load.spritesheet("scientistRunningSpritesheet", "./assets/running spritesheet 64 pixels a frame.png", {frameWidth: 64});
         // Load UI buttons
-        this.load.image("playButton", "./assets/janky play button.png")
+        this.load.image("playButton", "./assets/janky play button.png");
         // Load audio assets
     }
 
