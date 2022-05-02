@@ -16,8 +16,8 @@ class Play extends Phaser.Scene {
         /*
         Initiate variables to use
         */
-        this.platformSpawnXCoord = globalGame.config.width * 1.5;
-        //this.platformSpawnXCoord = globalGame.config.width * .76;
+        this.platformSpawnRightThreshold = globalGame.config.width * 1.5;
+        //this.platformSpawnRightThreshold = globalGame.config.width * .76;
         // Platform pooling code adapted from code by Emanuele Feronato: https://www.emanueleferonato.com/2018/11/13/build-a-html5-endless-runner-with-phaser-in-a-few-lines-of-code-using-arcade-physics-and-featuring-object-pooling/ 
         this.activePlatformGroup = this.add.group(
             {
@@ -86,7 +86,16 @@ class Play extends Phaser.Scene {
             object2.destroy();
         });
         this.playerAndCollectibleCollider.overlapOnly = true;
-
+        upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        upKey.on("down", () => {
+            console.log("HI");
+            console.log(this.playerAndPlatformCollider.object1);
+            // Check if the body of this.playerChar is colliding with something on its bottom side
+            if (this.playerAndPlatformCollider.object1.body.touching.down && !this.obstacleInRange) {
+                this.playerChar.body.setVelocityY(-200);
+            }
+        }
+        );
 
 
 
@@ -98,8 +107,8 @@ class Play extends Phaser.Scene {
         
         this.input.keyboard.on("keydown-D", () => {console.log("D"); this.currEnvScrollXVel -= 10 * !this.encounterActive;});
         this.input.keyboard.on("keydown-A", () => {console.log("A"); this.currEnvScrollXVel += 10 * !this.encounterActive;});
-        this.input.keyboard.on("keydown-UP", () => {
-            console.log("UP");})
+        //this.input.keyboard.on("keydown-UP", () => {
+        //    console.log("UP");})
         this.input.keyboard.on("keydown-DOWN", () => {
             console.log("DOWN");
         });
@@ -144,7 +153,7 @@ class Play extends Phaser.Scene {
         }
 
         while (
-            (this.rightmostPlatform.x + this.rightmostPlatform.width) < this.platformSpawnXCoord
+            (this.rightmostPlatform.x + this.rightmostPlatform.width) < this.platformSpawnRightThreshold
             && !this.encounterActive) {
                 console.assert(this.rightmostPlatform.body.x + this.rightmostPlatform.body.width === this.getPhysBounds(this.rightmostPlatform).right, "Platform check failed: " + (this.rightmostPlatform.body.x + this.rightmostPlatform.body.width) + " != " + this.getPhysBounds(this.rightmostPlatform).right);
 
@@ -189,9 +198,9 @@ class Play extends Phaser.Scene {
                 */
             }
             
-            else if (this.enemyTriggerPlatform.x + this.enemyTriggerPlatform.width <= this.platformSpawnXCoord) {
+            else if (this.enemyTriggerPlatform.x + this.enemyTriggerPlatform.width <= this.platformSpawnRightThreshold) {
                 
-                while ((this.rightmostPlatform.x + this.rightmostPlatform.width) < this.platformSpawnXCoord) {
+                while ((this.rightmostPlatform.x + this.rightmostPlatform.width) < this.platformSpawnRightThreshold) {
                         this.spawnPlatform(this.getPhysBounds(this.rightmostPlatform).right, this.platformSpawnYCoord);
 
                 }
@@ -223,6 +232,7 @@ class Play extends Phaser.Scene {
         // If a platform can't be retrieved from the pool, create a new one
         else {
             platformToSpawn = this.physics.add.sprite(x, y, "platform1");
+            //platformToSpawn = new Platform(this, x, y, "platform1");
             platformToSpawn.setDisplaySize(this.platform1BaseWidth, this.defaultPlatformBodyHeight);
             platformToSpawn.setPushable(false);
 
@@ -328,7 +338,7 @@ class Play extends Phaser.Scene {
         while (true) {
             let newPlatform = this.spawnPlatform(currX, this.platformSpawnYCoord);
             currX = this.getPhysBounds(newPlatform).right;
-            if (currX >= this.platformSpawnXCoord) {
+            if (currX >= this.platformSpawnRightThreshold) {
                 break;
             }
         }
@@ -350,8 +360,9 @@ class Play extends Phaser.Scene {
         this.input.keyboard.enabled = false;
         // Play animation and wait for it to finish
         if (this.obstacleInRange) {
-            this.encounterActive = false;
             this.obstacleInRange = false;
+            // Encounter no longer active
+            this.encounterActive = false;
             this.currEnvScrollXVel = -200;
             this.playerChar.setVelocityY(-350);
 
@@ -376,6 +387,8 @@ class Play extends Phaser.Scene {
                 
                 // Return control to player
                 this.input.keyboard.enabled = true;
+
+                
                 });
                 this.playerAndPlatformCollider.collideCallback = undefined;
             };  
