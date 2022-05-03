@@ -86,6 +86,7 @@ class Play extends Phaser.Scene {
         });
         this.playerAndCollectibleCollider = this.physics.add.collider(this.playerChar, this.collectibleGroup, (object1, object2) => {
             object2.handleCollisionWithPlayer();
+            this.scorekeeper.addScoreForCollectible(this.currLevel);
         });
         this.playerAndCollectibleCollider.overlapOnly = true;
         // Jumping mechanics
@@ -140,11 +141,10 @@ class Play extends Phaser.Scene {
         // Add a scorekeeper (currently doesn't work)
         this.scorekeeper = new Scorekeeper({
             scene: this,
-            x: 25,
-            y: 25
+            x: 24,
+            y: 24
         });
         this.scorekeeper.setDepth(20);
-        console.log(this.scorekeeper)
 
         // TEMPORARY STUFF
         console.log("playScene started");
@@ -361,6 +361,7 @@ class Play extends Phaser.Scene {
                 this.Arrow3.changeToPassingSprite();
                 this.Arrow4.changeToPassingSprite();
 
+                this.scorekeeper.addScoreForLevelIncrease(this.currLevel);
                 this.playJumpingToNextLevelAnim();
             }
         });
@@ -402,8 +403,6 @@ class Play extends Phaser.Scene {
         },
         1000
         );
-        // Turn off player control
-        this.input.keyboard.enabled = false;
         // Don't let lava rise anymore
         this.lavaRisingTween.pause();
         // Play animation and wait for it to finish
@@ -427,14 +426,13 @@ class Play extends Phaser.Scene {
                 
                 this.playerChar.body.setVelocityY(0);
                 this.playerChar.setY(this.playerStartPosY);
+
+                this.collectibleGroup.incY(heightDiff);
         
                 this.myBackground.tilePositionY -= heightDiff;
                 this.resetLavaForNextLevel();
 
                 this.obstacleTimer = this.time.addEvent(this.obstacleTimerConfig);
-                
-                // Return control to player
-                this.input.keyboard.enabled = true;
                 });
                 this.playerAndPlatformCollider.collideCallback = undefined;
             };  
