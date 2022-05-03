@@ -5,14 +5,17 @@ class Scorekeeper extends Phaser.GameObjects.Text {
 
         this.textStyleConfig = {
             fontFamily: "Impact",
+            fontSize: "large",
             color: "white",
-            stroke: "black",
-            strokeThickness: "1px",
             align: "left"
         }
         this.setStyle(this.textStyleConfig);
+        
         this.currScore = 0;
+        // Treat this as a HUD game object that doesn't move with the rest of the world
+        this.setScrollFactor(0);
         params.scene.add.existing(this);
+        params.scene.sys.displayList.add(this);
     }
 
     getScore() {
@@ -20,7 +23,7 @@ class Scorekeeper extends Phaser.GameObjects.Text {
     }
     
     addScoreForCollectible(currLevel) {
-        this.currScore += currLevel * 5;
+        this.currScore += Math.ceil(currLevel/4) * 5;
         this.text = "Score: " + this.currScore;
     }
 
