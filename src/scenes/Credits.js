@@ -29,7 +29,7 @@ class Credits extends Phaser.Scene {
         }
         
         // show menu text
-        this.add.text(globalGame.config.width/2, globalGame.config.height/2, 'Art by:\nMilesKatlin\n\nProgramming by:\nSalil Tantamjarik\nGustavo Cruz', creditsConfig).setOrigin(0.5);
+        this.add.text(globalGame.config.width/2, globalGame.config.height/2, 'Art by:\nMiles Katlin\n\nProgramming by:\nSalil Tantamjarik\nGustavo Cruz', creditsConfig).setOrigin(0.5);
         //show title button
         this.titleButton = this.add.sprite(globalGameConfig.width/8, globalGameConfig.height/1.15, "titleButton");
         this.titleButton.setInteractive();

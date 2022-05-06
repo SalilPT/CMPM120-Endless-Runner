@@ -26,9 +26,13 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
+        // set up button sprites
         this.playButton = this.add.sprite(globalGameConfig.width/2, globalGameConfig.height/1.47, "playButton");
         this.creditsButton = this.add.sprite(globalGameConfig.width/2, globalGameConfig.height/1.47 + this.playButton.height + this.playButton.height/6, "creditsButton");
-        this.title = this.add.sprite(globalGameConfig.width/2, globalGameConfig.height/4, "title");
+        // st up title sprite
+        this.title = this.add.sprite(globalGameConfig.width/2, globalGameConfig.height/4.5, "title");
+        this.title.setScale(.90);
+        // set button sprites as interactibles 
         this.playButton.setInteractive();
         this.creditsButton.setInteractive();
         // put menu scene to the top of screen
