@@ -7,8 +7,8 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('promtedArrow', './assets/arrow 1.png');
-        this.load.image('passedArrow', './assets/greenA.png');
+        this.load.image('promtedArrow', './assets/blueArrow.png');
+        this.load.image('passedArrow', './assets/greenArrow.png');
         
         // Load sprites for collectibles
         this.load.image('crystal_red', './assets/red crystal.png');
@@ -335,11 +335,11 @@ class Play extends Phaser.Scene {
         //add sprites to the scene 
         this.Arrow1 = new KeyComboArrow(this, x, y, 'promtedArrow', 0); // dont set origin to (0,0) or rotation wont work properly
         this.Arrow1.rotateArrow();
-        this.Arrow2 = new KeyComboArrow(this, x + this.Arrow1.width + this.Arrow1.width/10, y, 'promtedArrow', 0);
+        this.Arrow2 = new KeyComboArrow(this, x + this.Arrow1.width + this.Arrow1.width/15, y, 'promtedArrow', 0);
         this.Arrow2.rotateArrow();
-        this.Arrow3 = new KeyComboArrow(this, x + (this.Arrow1.width*2) + (this.Arrow1.width/10)*2, y, 'promtedArrow', 0);
+        this.Arrow3 = new KeyComboArrow(this, x + (this.Arrow1.width*2) + (this.Arrow1.width/15)*2, y, 'promtedArrow', 0);
         this.Arrow3.rotateArrow();
-        this.Arrow4 = new KeyComboArrow(this, x + (this.Arrow1.width*3) + (this.Arrow1.width/10)*3, y, 'promtedArrow', 0);
+        this.Arrow4 = new KeyComboArrow(this, x + (this.Arrow1.width*3) + (this.Arrow1.width/15)*3, y, 'promtedArrow', 0);
         this.Arrow4.rotateArrow();
         // Bring arrows to foreground
         this.Arrow1.setDepth(10);
