@@ -13,7 +13,7 @@ let globalGameConfig = {
         }
     },
     //scene: [Menu, Credits, Play]
-    scene: [Menu, Play]
+    scene: [Menu, Play, Credits]
 }
 
 let globalGame = new Phaser.Game(globalGameConfig);
