@@ -35,16 +35,28 @@ class Menu extends Phaser.Scene {
         // set button sprites as interactibles 
         this.playButton.setInteractive();
         this.creditsButton.setInteractive();
+        // set instruction text
+        let menuConfig = {
+            fontFamily: 'Courier',
+            fontSize: '20px',
+            color: '#72DAE3',
+            align: 'left',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+        }
+        this.add.text(globalGame.config.width/5, globalGame.config.height/1.12, 'Controls:\n↑ to jump\n←↑↓→ when prompted', menuConfig).setOrigin(0.5);
         // put menu scene to the top of screen
         this.scene.bringToTop();
-        // play button functionality
+        // playButton functionality
         this.playButton.on("pointerdown", () => {
             console.log("Clicked on playButton in Menu scene");
             this.scene.sleep("menuScene")
             // start the game
             this.scene.get("playScene").startGameplay();
         });
-        //credits button functionality
+        //creditsButton functionality
         this.creditsButton.on("pointerdown", () => {
             console.log("Clicked on creditsButton in Menu scene");
             this.scene.sleep("menuScene");
@@ -52,6 +64,7 @@ class Menu extends Phaser.Scene {
             // start the game
             this.scene.launch("creditsScene");
         });
+        // launch the playScene in parallel to the menut scene
         this.scene.launch("playScene");
         // Assign events for when buttons are clicked
         upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
