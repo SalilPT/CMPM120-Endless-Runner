@@ -1,6 +1,8 @@
 // Naming convention: camel case
 // Line endings: LF
 
+"use strict";
+
 let globalGameConfig = {
     type: Phaser.WEBGL,
     width: 640,
