@@ -17,6 +17,10 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
             repeat: -1
         });
         
+        this.losingAnim = this.scene.anims.create({
+            key: "scientistLosing",
+            // COMPLETE THIS
+        })
     }
 
     update() {
@@ -38,8 +42,10 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
     }
 
     // Play the animation for when the player loses
+    // Returns the duration of the animation in ms
     playLossAnim() {
-
+        //this.anims.play("scientistLosing");
+        //return this.losingAnim.duration;
     }
 
     playAttackObstacleAnim() {

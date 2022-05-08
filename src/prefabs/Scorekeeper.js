@@ -1,6 +1,5 @@
 class Scorekeeper extends Phaser.GameObjects.Text {
     constructor(params) {
-
         super(params.scene, params.x, params.y, "SCORE: 0", {fontFamily: "Impact"});
 
         this.textStyleConfig = {

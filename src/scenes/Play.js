@@ -167,6 +167,7 @@ class Play extends Phaser.Scene {
             x: 24,
             y: 24
         });
+        this.scorekeeper.setVisible(false);
         this.scorekeeper.setDepth(20);
 
 
@@ -584,10 +585,17 @@ class Play extends Phaser.Scene {
         this.lavaRisingTween.play();
         
         this.setKeyComboPlacementTimer(this.currTimeForLevel * (1-this.fractionOfLevelTimeForCombo));
+
+        this.scorekeeper.setVisible(true);
     }
 
     endGameplay() {
-        
+        let losingAnimTime = this.playerChar.playLossAnim();
+        this.time.delayedCall(losingAnimTime,
+            () => {
+                // COMPLETE THIS
+            }
+        );
     }
 
     // helper function to return random Y coordinate above the current platform height for collectibles
