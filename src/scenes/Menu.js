@@ -13,6 +13,7 @@ class Menu extends Phaser.Scene {
         // Load background and lava
         this.load.spritesheet("volcanicBackground", "./assets/background sprite sheet (3 frames) 384x128.png", {frameWidth: 384/3, frameHeight: 128});
         this.load.spritesheet("lavaTop", "./assets/lava sprite sheet (4 frames) 512x50.png", {frameWidth: 512/4, frameHeight: 50});
+        this.load.spritesheet("lavaBottom", "./assets/Lava Bottom Spritesheet (4 frames).png", {frameWidth: 512/4, frameHeight: 64});
         // Load assets for Platforms and Scientist
         this.load.image("platform1", "./assets/Rock Platform 1 (Shadow)(128x74).png");
         

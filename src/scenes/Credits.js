@@ -37,7 +37,8 @@ class Credits extends Phaser.Scene {
         //titleButton button functionality
         this.titleButton.on("pointerdown", () => {
             console.log("Clicked on titleButton in Credits scene");
-            this.scene.sleep("creditsScene")
+            //this.scene.sleep("creditsScene")
+            this.scene.stop(); // Prevent multiple background timers from being launched. Currently this restarts the background. TODO: Fix this
             this.scene.wake("menuScene");
             this.scene.wake("playScene");
         });

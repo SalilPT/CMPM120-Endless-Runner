@@ -50,6 +50,12 @@ class Play extends Phaser.Scene {
         this.myBackgroundTimer = this.createTileSpriteAnimTimer(this.myBackground, 3, 4);
         this.lavaTop = this.add.tileSprite(0, globalGame.config.height, globalGame.config.width, 50, "lavaTop", 0).setOrigin(0);
         this.lavaTopAnimTimer = this.createTileSpriteAnimTimer(this.lavaTop, 4, 4);
+        this.lavaBottom = this.add.tileSprite(0, globalGame.config.height, globalGame.config.width, globalGame.config.height, "lavaBottom", 0).setOrigin(0);
+        this.lavaBottomAnimTimer = this.createTileSpriteAnimTimer(this.lavaBottom, 4, 4);
+        // Use a render texture game object to prevent gaps between the top and bottom portions of the lava
+        this.lavaRenderTexture = this.add.renderTexture(0, globalGame.config.height, globalGame.config.width, globalGame.config.height).setOrigin(0);
+        this.lavaRenderTexture.draw(this.lavaTop, 0, 0);
+        this.lavaRenderTexture.draw(this.lavaBottom, 0, this.lavaTop.height);
 
         // Variables for player character
         this.playerStartPosX = globalGame.config.width / 2;
@@ -110,7 +116,9 @@ class Play extends Phaser.Scene {
             to: this.playerStartPosY + this.playerChar.body.height/4,
             duration: this.currTimeForLevel,
             ease: Phaser.Math.Easing.Quadratic.Out,
-            onUpdate: () => {this.lavaTop.y = this.lavaRisingTween.getValue()},
+            onUpdate: () => {
+                this.lavaRenderTexture.y = this.lavaRisingTween.getValue();
+            },
             onComplete: () => {
                 console.log("Lava reached player");
                 this.endGameplay();
@@ -149,7 +157,7 @@ class Play extends Phaser.Scene {
         this.platformsLeftToSpawnOnCurrLevel += 2;
 
         // Layering
-        this.lavaTop.setDepth(3);
+        this.lavaRenderTexture.setDepth(3);
         this.playerChar.setDepth(2);
         this.activePlatformGroup.setDepth(1);
 
@@ -242,9 +250,14 @@ class Play extends Phaser.Scene {
         //this.currEnvScrollXVel = this.currEnvScrollXVel == -1000 ? -1000 : -1000; // breaks spawning; might need to add upcoming platforms to group that gets updated after spawning
 
 
-        // Update background
+        // Update background and lava
         this.myBackground.tilePositionX -= this.currEnvScrollXVel/60;
         this.lavaTop.tilePositionX -= this.currEnvScrollXVel/60;
+        this.lavaBottom.tilePositionX -= this.currEnvScrollXVel/60;
+
+        this.lavaRenderTexture.clear();
+        this.lavaRenderTexture.draw(this.lavaTop, 0, 0);
+        this.lavaRenderTexture.draw(this.lavaBottom, 0, this.lavaTop.height);
 
         //console.log("this.currEnvScrollXVel: " + this.currEnvScrollXVel);
         //console.log("this.currEnvScrollYVel: " + this.currEnvScrollYVel);
@@ -513,7 +526,7 @@ class Play extends Phaser.Scene {
 
     // After every level, reset lava to bottom of screen and adjust the amount of time the player has to complete the new level
     resetLavaForNextLevel() {
-        this.lavaTop.y = globalGame.config.height;
+        this.lavaRenderTexture.y = globalGame.config.height;
         this.lavaRisingTween.remove();
 
         // Sigmoid curve is used to get the next time for level
