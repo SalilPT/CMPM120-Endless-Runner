@@ -15,10 +15,11 @@ class Credits extends Phaser.Scene {
         this.myBackgroundTimer = this.createTileSpriteAnimTimer(this.myBackground, 3, 4);
         // credit text configuration
         let creditsConfig = {
-            fontFamily: 'Courier',
-            fontSize: '30px',
-            fontStyle: 'Bold',
-            color: '#72DAE3',
+            fontFamily: 'jebFont',
+            fontSize: '18px',
+            color: '#FFFFFF',
+            stroke: '#000000',
+            strokeThickness:2,
             align: 'left',
             padding: {
                 top: 5,
@@ -27,10 +28,11 @@ class Credits extends Phaser.Scene {
             fixedWidth: 0
         }
         
-        // show menu text
-        this.add.text(globalGame.config.width/2, globalGame.config.height/2, 'Art by:\nMiles Katlin\n\nProgramming by:\nSalil Tantamjarik\nGustavo Cruz', creditsConfig).setOrigin(0.5);
+        // show credits text
+        this.add.text(globalGame.config.width/2, globalGame.config.height/2, 'ART BY:\nMILES KATLIN\n\nPROGRAMMING BY:\nSALIL TANTAMJARIK\nGUSTAVO CRUZ\n\nSOUND AND MUSIC BY:\nSALIL TANTAMJARIK\nMILES KATLIN\nGUSTAVO CRUZ', creditsConfig).setOrigin(0.5);
         //show title button
-        this.titleButton = this.add.sprite(globalGameConfig.width/8, globalGameConfig.height/1.15, "titleButton");
+        this.titleButton = this.add.sprite(globalGameConfig.width/8, globalGameConfig.height/1.15, "creditsButton");
+        this.add.text(globalGameConfig.width/8, globalGameConfig.height/1.15,'BACK', creditsConfig).setOrigin(.5);
         this.titleButton.setInteractive();
         //titleButton button functionality
         this.titleButton.on("pointerdown", () => {

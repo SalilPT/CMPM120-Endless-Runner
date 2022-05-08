@@ -26,27 +26,39 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
-        // set up button sprites
-        this.playButton = this.add.sprite(globalGameConfig.width/2, globalGameConfig.height/1.47, "playButton");
-        this.creditsButton = this.add.sprite(globalGameConfig.width/2, globalGameConfig.height/1.47 + this.playButton.height + this.playButton.height/6, "creditsButton");
-        // st up title sprite
-        this.title = this.add.sprite(globalGameConfig.width/2, globalGameConfig.height/4.5, "title");
-        this.title.setScale(.90);
-        // set button sprites as interactibles 
-        this.playButton.setInteractive();
-        this.creditsButton.setInteractive();
-        // set instruction text
+        // menu text configuration
         let menuConfig = {
-            fontFamily: 'Courier',
+            fontFamily: "JebFont",
             fontSize: '20px',
-            color: '#72DAE3',
-            align: 'left',
+            color: '#ff9933',
+            align: 'center',
+            stroke: '#000000',
+            strokeThickness:2,
             padding: {
                 top: 5,
                 bottom: 5,
             },
         }
-        this.add.text(globalGame.config.width/5, globalGame.config.height/1.12, 'Controls:\n↑ to jump\n←↑↓→ when prompted', menuConfig).setOrigin(0.5);
+        // set up title sprite
+        this.title = this.add.sprite(globalGameConfig.width/2, globalGameConfig.height/6, "title");
+        this.add.text(globalGameConfig.width/2, globalGameConfig.height/2.75,'INFERNAL ESCAPE', menuConfig).setOrigin(.5);
+        this.title.setScale(.90);
+        // set up button sprites
+        menuConfig.fontSize = 16;
+        menuConfig.color = '#FFFFFF';
+        this.playButton = this.add.sprite(globalGameConfig.width/2.8, globalGameConfig.height/1.47, "playButton").setOrigin(.5);
+        this.add.text(globalGameConfig.width/2.8, globalGameConfig.height/1.47,'PLAY', menuConfig).setOrigin(.5);
+        this.creditsButton = this.add.sprite(globalGameConfig.width/1.60, globalGameConfig.height/1.47, "creditsButton").setOrigin(.5);
+        this.add.text(globalGameConfig.width/1.59, globalGameConfig.height/1.47,'CREDITS', menuConfig).setOrigin(.5);
+        // set button sprites as interactibles 
+        this.playButton.setInteractive();
+        this.creditsButton.setInteractive();
+        // set instruction text
+        menuConfig.align = 'left'
+        menuConfig.color = '#ff9933'
+        menuConfig.fontSize = 12;
+        this.add.text(globalGame.config.width/4.5, globalGame.config.height/1.10, 'CONTROLS:\nUP KEY TO JUMP\nARROW KEYS WHEN PROMTED', menuConfig).setOrigin(0.5);
+        
         // put menu scene to the top of screen
         this.scene.bringToTop();
         // playButton functionality
