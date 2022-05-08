@@ -19,7 +19,8 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
         
         this.losingAnim = this.scene.anims.create({
             key: "scientistLosing",
-            // COMPLETE THIS
+            frames: this.anims.generateFrameNumbers("scientistDeathSpritesheet", {start:0}),
+            frameRate: 12,
         })
     }
 
@@ -44,7 +45,7 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
     // Play the animation for when the player loses
     // Returns the duration of the animation in ms
     playLossAnim() {
-        //this.anims.play("scientistLosing");
+        this.anims.play("scientistLosing");
         //return this.losingAnim.duration;
     }
 

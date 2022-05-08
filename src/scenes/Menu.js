@@ -19,6 +19,7 @@ class Menu extends Phaser.Scene {
         
         this.load.spritesheet("scientist", "./assets/running spritesheet 64 pixels a frame.png", {frameWidth: 64});
         this.load.spritesheet("scientistRunningSpritesheet", "./assets/running spritesheet 64 pixels a frame.png", {frameWidth: 64});
+        this.load.spritesheet("scientistDeathSpritesheet", "./assets/Jeb Death Spritesheet 64x64.png", {frameWidth:64});
         // Load UI buttons
         this.load.image("playButton", "./assets/playButton.png");
         this.load.image("creditsButton", "./assets/creditsButton.png")
