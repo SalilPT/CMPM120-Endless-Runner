@@ -1,10 +1,10 @@
 class Scorekeeper extends Phaser.GameObjects.Text {
     constructor(params) {
 
-        super(params.scene, params.x, params.y, "Score: 0", {fontFamily: "Impact"});
+        super(params.scene, params.x, params.y, "SCORE: 0", {fontFamily: "Impact"});
 
         this.textStyleConfig = {
-            fontFamily: "Impact",
+            fontFamily: "JebFont",
             fontSize: "large",
             color: "white",
             align: "left"
@@ -24,11 +24,11 @@ class Scorekeeper extends Phaser.GameObjects.Text {
     
     addScoreForCollectible(currLevel) {
         this.currScore += Math.ceil(currLevel/4) * 5;
-        this.text = "Score: " + this.currScore;
+        this.text = "SCORE: " + this.currScore;
     }
 
     addScoreForLevelIncrease(levelBeforeJump) {
         this.currScore += levelBeforeJump * 20;
-        this.text = "Score: " + this.currScore;
+        this.text = "SCORE: " + this.currScore;
     }
 }
