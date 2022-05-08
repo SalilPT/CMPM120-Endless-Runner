@@ -30,7 +30,7 @@ class Menu extends Phaser.Scene {
         let menuConfig = {
             fontFamily: "JebFont",
             fontSize: '20px',
-            color: '#ff9900',
+            color: '#ff9933',
             align: 'center',
             stroke: '#000000',
             strokeThickness:2,
@@ -54,9 +54,10 @@ class Menu extends Phaser.Scene {
         this.playButton.setInteractive();
         this.creditsButton.setInteractive();
         // set instruction text
-        menuConfig.color = '#FFFFFF'
-        menuConfig.fontSize = 14;
-        this.add.text(globalGame.config.width/2, globalGame.config.height/1.12, 'CONTROLS:\nUP KEY TO JUMP\nARROW KEYS WHEN PROMTED', menuConfig).setOrigin(0.5);
+        menuConfig.align = 'left'
+        menuConfig.color = '#ff9933'
+        menuConfig.fontSize = 12;
+        this.add.text(globalGame.config.width/4.5, globalGame.config.height/1.10, 'CONTROLS:\nUP KEY TO JUMP\nARROW KEYS WHEN PROMTED', menuConfig).setOrigin(0.5);
         
         // put menu scene to the top of screen
         this.scene.bringToTop();
