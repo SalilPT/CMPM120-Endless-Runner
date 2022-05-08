@@ -58,7 +58,7 @@ class Menu extends Phaser.Scene {
         menuConfig.align = 'left'
         menuConfig.color = '#ff9933'
         menuConfig.fontSize = 12;
-        this.add.text(globalGame.config.width/4.5, globalGame.config.height/1.10, 'CONTROLS:\nUP KEY TO JUMP\nARROW KEYS WHEN PROMTED', menuConfig).setOrigin(0.5);
+        this.add.text(globalGame.config.width/4.5, globalGame.config.height/1.10, 'CONTROLS:\nUP KEY TO JUMP\nARROW KEYS WHEN PROMPTED', menuConfig).setOrigin(0.5);
         
         // put menu scene to the top of screen
         this.scene.bringToTop();
