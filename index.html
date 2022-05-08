@@ -5,13 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeb's Infernal Escape</title>
-
+    <!-- loading custom fonts came from https://www.webtips.dev/webtips/phaser/custom-fonts-in-phaser3 
+    and https://phaser.discourse.group/t/loading-fonts-in-phaser-3-not-working/8898/3-->
     <style>
         canvas {
             display: block;
             margin: auto;
         }
+        @font-face {
+            font-family: CustomFont;
+            src: url('./assets/jebs-infernal-esc-font/jebs-infernal-esc-font.ttf');
+        }
     </style>
+    <div style="font-family: CustomFont; visibility: hidden">
+        .
+    </div>
+    <link rel="preload" as="font" href='./assets/jebs-infernal-esc-font/jebs-infernal-esc-font.ttf' type="font/ttf" />
 </head>
 <body>
     <!-- Include source code files here -->

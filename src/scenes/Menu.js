@@ -37,7 +37,7 @@ class Menu extends Phaser.Scene {
         this.creditsButton.setInteractive();
         // set instruction text
         let menuConfig = {
-            fontFamily: 'Courier',
+            fontFamily: "CustomFont",
             fontSize: '20px',
             color: '#72DAE3',
             align: 'left',
@@ -47,6 +47,7 @@ class Menu extends Phaser.Scene {
             },
         }
         this.add.text(globalGame.config.width/5, globalGame.config.height/1.12, 'Controls:\n↑ to jump\n←↑↓→ when prompted', menuConfig).setOrigin(0.5);
+        
         // put menu scene to the top of screen
         this.scene.bringToTop();
         // playButton functionality
