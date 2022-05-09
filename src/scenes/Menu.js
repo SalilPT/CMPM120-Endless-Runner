@@ -85,6 +85,7 @@ class Menu extends Phaser.Scene {
         this.scene.bringToTop();
         // playButton functionality
         this.playButton.on("pointerdown", () => {
+            this.sound.play('buttonSound');
             console.log("Clicked on playButton in Menu scene");
             this.scene.sleep("menuScene")
             // start the game
@@ -92,6 +93,7 @@ class Menu extends Phaser.Scene {
         });
         //creditsButton functionality
         this.creditsButton.on("pointerdown", () => {
+            this.sound.play('buttonSound')
             console.log("Clicked on creditsButton in Menu scene");
             this.scene.sleep("menuScene");
             this.scene.sleep("playScene");

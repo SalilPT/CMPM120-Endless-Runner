@@ -8,7 +8,7 @@ class Credits extends Phaser.Scene {
     }
     preload() {
     }
-    
+
     create() {
         console.log("started the credits scene")
         this.myBackground = this.add.tileSprite(0, -globalGame.config.height, globalGame.config.width, globalGame.config.height*2, "volcanicBackground").setOrigin(0);
@@ -36,6 +36,7 @@ class Credits extends Phaser.Scene {
         this.titleButton.setInteractive();
         //titleButton button functionality
         this.titleButton.on("pointerdown", () => {
+            this.sound.play('buttonSound');
             console.log("Clicked on titleButton in Credits scene");
             //this.scene.sleep("creditsScene")
             this.scene.stop(); // Prevent multiple background timers from being launched. Currently this restarts the background. TODO: Fix this

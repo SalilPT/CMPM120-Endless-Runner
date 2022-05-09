@@ -26,6 +26,7 @@ class GameOver extends Phaser.Scene {
         //button functionality
         this.resetButton.setInteractive();
         this.resetButton.on("pointerdown", () => {
+            this.sound.play('buttonSound');
             console.log("Clicked on resetButton in  gameoverscene");
             this.scene.sleep(); // Prevent multiple background timers from being launched. Currently this restarts the background. TODO: Fix this
             this.scene.wake("menuScene");
