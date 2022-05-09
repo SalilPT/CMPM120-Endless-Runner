@@ -77,7 +77,7 @@ class Play extends Phaser.Scene {
             scene: this,
             x: this.playerStartPosX,
             y: this.playerStartPosY,
-            texture: "jebRunningSpritesheet",
+            texture: "scientist",
             frame: 0
         }
         this.playerChar = new Scientist(playerCharArgs).setOrigin(0.5);
