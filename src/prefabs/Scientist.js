@@ -38,6 +38,15 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
             frames: this.scene.anims.generateFrameNumbers("jebAttackSpritesheet"),
             frameRate: 12
         })
+        //audios
+        this.rnd = Phaser.Math.RND;
+        this.jumpArr = [];
+        this.jumpSound1 = this.scene.sound.add('jebJump1');
+        this.jumpSound2 = this.scene.sound.add('jebJump2');
+        this.jebDeathSound = this.scene.sound.add('jebDeath');
+        this.laserSound = this.scene.sound.add('jebLaser');
+        this.jumpArr.push(this.jumpSound1);
+        this.jumpArr.push(this.jumpSound2);
     }
 
     update() {
@@ -59,18 +68,22 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
     }
 
     playJumpingAnim() {
+        this.soundToPlay = this.rnd.pick(this.jumpArr);
         this.anims.play("jebJumping");
+        this.soundToPlay.play({detune:(Math.floor(Math.random() * 300)) - 150});
     }
 
     // Play the animation for when the player loses
     // Returns the duration of the animation in ms
     playLossAnim() {
         this.anims.play("jebLosing");
+        this.jebDeathSound.play();
         //return this.losingAnim.duration;
     }
 
     playAttackObstacleAnim() {
         this.anims.play("jebAttack");
+        this.laserSound.play({rate:2, detune:-1200});
 
     }
 

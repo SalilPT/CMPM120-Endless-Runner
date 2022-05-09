@@ -21,6 +21,7 @@ class Collectibles extends Phaser.Physics.Arcade.Sprite {
     handleCollisionWithPlayer() {
         // Prevent multiple unintended calls to this method
         this.body.checkCollision.none = true;
+        this.scene.sound.play('itemPickup', {detune: (Math.floor(Math.random() * 50)) - 50})
         // Play small animation
         this.scene.tweens.add({
             targets: this,
