@@ -11,20 +11,41 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
 
         // Animations
         this.scene.anims.create({
-            key: "scientistRunning",
-            frames: this.anims.generateFrameNumbers("scientistRunningSpritesheet", {start: 0}),
+            key: "jebRunning",
+            frames: this.anims.generateFrameNumbers("jebRunningSpritesheet", {start: 0}),
             frameRate: 12,
             repeat: -1
         });
         
         this.losingAnim = this.scene.anims.create({
-            key: "scientistLosing",
-            // COMPLETE THIS
+            key: "jebLosing",
+            frames: this.anims.generateFrameNumbers("jebDeathSpritesheet", {start:0}),
+            frameRate: 12,
+        })
+        this.scene.anims.create({
+            key: "jebIdle",
+            frames: this.anims.generateFrameNumbers("jebIdleSpritesheet", {start:0}),
+            frameRate: 8,
+            repeat: -1
+        })
+        this.scene.anims.create({
+            key: "jebJumping",
+            frames: this.scene.anims.generateFrameNumbers("jebJumpingSpritesheet", {start:0}),
+            frameRate: 16
+        })
+        this.scene.anims.create({
+            key: "jebAttack",
+            frames: this.scene.anims.generateFrameNumbers("jebAttackSpritesheet"),
+            frameRate: 12
         })
     }
 
     update() {
 
+    }
+
+    playIdleAnim(){
+        this.anims.play("jebIdle", 1);
     }
 
     // Play the background animation for the scientist when the menu is still visible
@@ -34,21 +55,22 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
 
     // Play running animation
     playRunningAnim() {
-        this.anims.play("scientistRunning");
+        this.anims.play("jebRunning", 1);
     }
 
     playJumpingAnim() {
-
+        this.anims.play("jebJumping");
     }
 
     // Play the animation for when the player loses
     // Returns the duration of the animation in ms
     playLossAnim() {
-        //this.anims.play("scientistLosing");
+        this.anims.play("jebLosing");
         //return this.losingAnim.duration;
     }
 
     playAttackObstacleAnim() {
+        this.anims.play("jebAttack");
 
     }
 

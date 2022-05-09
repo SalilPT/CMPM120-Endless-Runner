@@ -77,11 +77,12 @@ class Play extends Phaser.Scene {
             scene: this,
             x: this.playerStartPosX,
             y: this.playerStartPosY,
-            texture: "scientist",
+            texture: "jebRunningSpritesheet",
             frame: 0
         }
         this.playerChar = new Scientist(playerCharArgs).setOrigin(0.5);
-        this.playerChar.playMenuBackgroundAnim();
+        this.playerChar.playIdleAnim();
+        //this.playerChar.playMenuBackgroundAnim();
         
         // Have the camera follow the player character
         this.cameras.main.startFollow(this.playerChar);
@@ -117,6 +118,7 @@ class Play extends Phaser.Scene {
             if ((this.playerChar.body.y + this.playerChar.body.halfHeight) == this.playerStartPosY
             && !this.obstacleInRange) {
                 console.log("Jumping");
+                this.playerChar.playJumpingAnim()
                 this.playerChar.body.setVelocityY(-400);
             }
         }
@@ -192,8 +194,12 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        
-        // Check collisions using Arcade Physics
+        // keeps track of when to play running animation
+        if ((this.playerChar.body.y + this.playerChar.body.halfHeight) == this.playerStartPosY
+        && this.currEnvScrollXVel < 0){
+            this.playerChar.playRunningAnim();
+        }
+            // Check collisions using Arcade Physics
 
         
         //this.currEnvScrollXVel = this.currEnvScrollXVel == -1000 ? -1000 : -1000; // breaks spawning; might need to add upcoming platforms to group that gets updated after spawning
@@ -213,7 +219,8 @@ class Play extends Phaser.Scene {
             if (this.getPhysBounds(this.enemyTriggerPlatform).x - this.getPhysBounds(this.playerChar).right <= this.platform1BaseWidth/2
             && !this.obstacleInRange) {
                 //this.currEnvScrollXVel = 0;
-                this.obstacleInRange = true;                
+                this.obstacleInRange = true;
+                this.playerChar.playIdleAnim();                
 
                 /*
                 // TRY TO SLOW DOWN PLATFORMS AS PLAYER APPOACHES ENEMY
@@ -386,7 +393,6 @@ class Play extends Phaser.Scene {
 
     // Place key combo
     placeKeyCombo(x, y, comboLength = 4) { // x,y coordinates of where the arrows apear horizontally
-        let CorrectInputNum = 0;
         //add sprites to the scene
         /*
         this.Arrow1 = new KeyComboArrow(this, x, y, 'promtedArrow', 0); // dont set origin to (0,0) or rotation wont work properly
@@ -545,10 +551,15 @@ class Play extends Phaser.Scene {
 
         // Play an animation of defeating enemy and then make player character jump
         console.warn("ANIMATION OF JEB FIRING LASER WOULD GO HERE");
+        console.log(this.playerChar.displayOriginY);
+        this.playerChar.playAttackObstacleAnim();
+        //this.playerChar.displayOriginY(this.playerChar.width/2, this.textures.get("jebRunningSpritesheet").getSourceImage().height - this.textures.get("jebAttackSpritesheet").getSourceImage().height);
+        console.log(this.playerChar.displayOriginY);
         this.time.delayedCall(
-            1000,
+            2000,
             () => {
                 this.currEnvScrollXVel = Math.max(this.baseEnvScrollXVel + this.envScrollXVelIncrement * this.currLevel, this.maxEnvScrollXVel);
+                this.playerChar.playJumpingAnim();
                 this.playerChar.setVelocityY(-600);
 
                 // Set callback for landing jump
