@@ -39,4 +39,9 @@ class KeyComboArrow extends Phaser.GameObjects.Sprite {
     changeToPassingSprite(){
         this.setTexture('passedArrow',0);
     }
+
+    // Change arrow's sprite texture back to what it was originally
+    changeToUnpassedSprite() {
+        this.setTexture("promtedArrow", 0);
+    }
 }

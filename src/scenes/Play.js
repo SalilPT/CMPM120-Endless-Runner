@@ -111,11 +111,12 @@ class Play extends Phaser.Scene {
         // Jumping mechanics
         upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         upKey.on("down", () => {
-            console.log("Jumping");
+            
             // Normally, checking whether or not a character is on ground like this would be bad.
             // But here, it works.
             if ((this.playerChar.body.y + this.playerChar.body.halfHeight) == this.playerStartPosY
             && !this.obstacleInRange) {
+                console.log("Jumping");
                 this.playerChar.body.setVelocityY(-400);
             }
         }
@@ -194,9 +195,7 @@ class Play extends Phaser.Scene {
         
         // Check collisions using Arcade Physics
 
-        // Update current onscreen and offscreen platforms
-        //this.currEnvScrollXVel = this.currEnvScrollXVel <= -1000 ? -100 : this.currEnvScrollXVel - 500;
-        //console.log(this.platformPool.getLength(), this.activePlatformGroup.getLength());
+        
         //this.currEnvScrollXVel = this.currEnvScrollXVel == -1000 ? -1000 : -1000; // breaks spawning; might need to add upcoming platforms to group that gets updated after spawning
                 
 
@@ -263,6 +262,8 @@ class Play extends Phaser.Scene {
 
         //console.log("this.currEnvScrollXVel: " + this.currEnvScrollXVel);
         //console.log(this.playerChar.x)
+
+        // Update current onscreen and offscreen platforms
         for (let platform of this.activePlatformGroup.getChildren()) {
             if ((platform.x + platform.displayWidth) < this.leftBoundPlatformCutoff
             || platform.y > globalGame.config.height) {
@@ -384,9 +385,10 @@ class Play extends Phaser.Scene {
     }
 
     // Place key combo
-    placeKeyCombo(x, y) { // x,y coordinates of where the arrows apear horizontally
+    placeKeyCombo(x, y, comboLength = 4) { // x,y coordinates of where the arrows apear horizontally
         let CorrectInputNum = 0;
-        //add sprites to the scene 
+        //add sprites to the scene
+        /*
         this.Arrow1 = new KeyComboArrow(this, x, y, 'promtedArrow', 0); // dont set origin to (0,0) or rotation wont work properly
         this.Arrow1.rotateArrow();
         this.Arrow2 = new KeyComboArrow(this, x + this.Arrow1.width + this.Arrow1.width/15, y, 'promtedArrow', 0);
@@ -395,28 +397,57 @@ class Play extends Phaser.Scene {
         this.Arrow3.rotateArrow();
         this.Arrow4 = new KeyComboArrow(this, x + (this.Arrow1.width*3) + (this.Arrow1.width/15)*3, y, 'promtedArrow', 0);
         this.Arrow4.rotateArrow();
-        // Bring arrows to foreground
-        this.Arrow1.setDepth(10);
-        this.Arrow2.setDepth(10);
-        this.Arrow3.setDepth(10);
-        this.Arrow4.setDepth(10);
+        */
+        this.keyComboArrows = [];
+        let arrowWidth = this.textures.get("promtedArrow").getSourceImage().width;
+        for (let i = 0; i < comboLength; i++) {
+            let newArrow = new KeyComboArrow(this, x + (arrowWidth + arrowWidth/15) * i, y, 'promtedArrow', 0);
+            newArrow.rotateArrow();
+            // Bring new arrow to foreground
+            newArrow.setDepth(10);
+            this.keyComboArrows.push(newArrow);
+        }
+        // Center the arrows around the provided x parameter
+        let xOffset = x - Phaser.Math.Average([this.keyComboArrows.at(0).x, this.keyComboArrows.at(-1).x]);
+        this.keyComboArrows.forEach((arrow) => {arrow.x += xOffset;});
+
         // create a keycombo based on the current orientation of the randomly rotated keys
-        let keyComboNeeded = this.input.keyboard.createCombo([this.Arrow1.getDirection(), this.Arrow2.getDirection(), this.Arrow3.getDirection(), this.Arrow4.getDirection()], {
+        let keyComboNeeded = this.input.keyboard.createCombo(Array.from(this.keyComboArrows, a => a.getDirection()), {
             resetOnWrongKey: true,  // if they press the wrong key is the combo reset?
             maxKeyDelay: 0,         // max delay (ms) between each key press (0 = disabled)
             deleteOnMatch: true    // if combo matches, will it delete itself?
         });
+
+        // Update textures of the arrows every 1/60th of a second
+        let keyComboUpdateTimer = this.time.addEvent({
+            delay: 1000/60,
+            callback: () => {
+                for (let i = 0; i < this.keyComboArrows.length; i++) {
+                    if (i < keyComboNeeded.index) {
+                        this.keyComboArrows[i].changeToPassingSprite();
+                    }
+                    else {
+                        this.keyComboArrows[i].changeToUnpassedSprite();
+                    }
+                }
+            },
+            loop: true
+        });
+
         // watch for keycombomatches
         this.input.keyboard.on('keycombomatch', (combo, event) => {
             if (combo === keyComboNeeded) { 
                 console.log('change arrow sprites to their passed sprite')
-                this.Arrow1.changeToPassingSprite();
-                this.Arrow2.changeToPassingSprite();
-                this.Arrow3.changeToPassingSprite();
-                this.Arrow4.changeToPassingSprite();
+                this.keyComboArrows.forEach((arrow) => arrow.changeToPassingSprite());
 
                 this.scorekeeper.addScoreForLevelIncrease(this.currLevel);
                 this.playJumpingToNextLevelAnim();
+
+                keyComboUpdateTimer.destroy();
+                // When matched, delete the arrows after one second
+                this.time.delayedCall(1000, () => {
+                    this.keyComboArrows.forEach((arrow) => {arrow.destroy();});
+                });
             }
         });
     }
@@ -450,16 +481,7 @@ class Play extends Phaser.Scene {
     playJumpingToNextLevelAnim() {
         
         //this.platformsLeftToSpawnOnCurrLevel = Infinity;
-        // destroy arrow sprites
-        this.time.delayedCall(
-            1000,
-            () => {
-                this.Arrow1.destroy();
-                this.Arrow2.destroy();
-                this.Arrow3.destroy();
-                this.Arrow4.destroy();
-            }
-        );
+
         // Don't let lava rise anymore
         this.lavaRisingTween.pause();
         // Define a collider callback function for once the player lands on the next level and remove it after the player lands
@@ -555,7 +577,7 @@ class Play extends Phaser.Scene {
         this.keyComboPlacementTimer = this.time.delayedCall(
             timeUntilPlacement,
             () => {
-                this.placeKeyCombo(this.playerStartPosX - 96, globalGame.config.height * 0.75);
+                this.placeKeyCombo(this.playerStartPosX, globalGame.config.height * 0.75, Math.min(1 + Math.ceil(this.currLevel/2), 4));
             }
         )
     }
