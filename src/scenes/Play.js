@@ -68,7 +68,8 @@ class Play extends Phaser.Scene {
             frame: 0
         }
         this.playerChar = new Scientist(playerCharArgs).setOrigin(0.5);
-        this.playerChar.playMenuBackgroundAnim();
+        this.playerChar.playIdleAnim();
+        //this.playerChar.playMenuBackgroundAnim();
         
         // Have the camera follow the player character
         this.cameras.main.startFollow(this.playerChar);
@@ -98,9 +99,10 @@ class Play extends Phaser.Scene {
         // Jumping mechanics
         upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         upKey.on("down", () => {
-            console.log("Jumping");
             if ((this.playerChar.body.y + this.playerChar.body.halfHeight) == this.playerStartPosY
-            && !this.obstacleInRange) {
+            && !this.obstacleInRange && this.currEnvScrollXVel < 0) {
+                console.log("Jumping");
+                this.playerChar.playJumpingAnim()
                 this.playerChar.body.setVelocityY(-400);
             }
         }
@@ -190,8 +192,14 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        
-        // Check collisions using Arcade Physics
+        if ((this.playerChar.body.y + this.playerChar.body.halfHeight) == this.playerStartPosY
+        && this.currEnvScrollXVel < 0){
+            this.playerChar.playRunningAnim();
+            if (this.obstacleInRange) {
+                this.playerChar.playIdleAnim();
+            }
+        }
+            // Check collisions using Arcade Physics
 
         // Update current onscreen and offscreen platforms
         //this.currEnvScrollXVel = this.currEnvScrollXVel <= -1000 ? -100 : this.currEnvScrollXVel - 500;
@@ -372,7 +380,6 @@ class Play extends Phaser.Scene {
 
     // Place key combo
     placeKeyCombo(x, y) { // x,y coordinates of where the arrows apear horizontally
-        let CorrectInputNum = 0;
         //add sprites to the scene 
         this.Arrow1 = new KeyComboArrow(this, x, y, 'promtedArrow', 0); // dont set origin to (0,0) or rotation wont work properly
         this.Arrow1.rotateArrow();
@@ -517,6 +524,8 @@ class Play extends Phaser.Scene {
             1000,
             () => {
                 this.currEnvScrollXVel = Math.max(this.baseEnvScrollXVel + this.envScrollXVelIncrement * this.currLevel, this.maxEnvScrollXVel);
+                console.log("going to play the jumping anim")
+                this.playerChar.playJumpingAnim();
                 this.playerChar.setVelocityY(-600);
 
                 // Set callback for landing jump
