@@ -21,6 +21,20 @@ class Play extends Phaser.Scene {
         /*
         Initiate variables to use
         */
+
+        //////////
+        // Variables for game balancing
+        this.currLevel = 1;
+        this.baseTimeForLevel = 10000;
+        this.minTimeForLevel = 4000;
+        this.levelDifficultyScale = 1.25;
+        this.fractionOfLevelTimeForCombo = (3/8);
+
+        this.baseEnvScrollXVel = -192;
+        this.maxEnvScrollXVel = -1600;
+        this.envScrollXVelIncrement = -32;
+        //////////
+
         this.platformSpawnRightThreshold = globalGame.config.width + this.textures.get("platform1").getSourceImage().width;
         //this.platformSpawnRightThreshold = globalGame.config.width * .76;
         // Platform pooling code adapted from code by Emanuele Feronato: https://www.emanueleferonato.com/2018/11/13/build-a-html5-endless-runner-with-phaser-in-a-few-lines-of-code-using-arcade-physics-and-featuring-object-pooling/ 
@@ -43,7 +57,6 @@ class Play extends Phaser.Scene {
 
         // The current scrolling speed of the environment 
         this.currEnvScrollXVel = 0;
-        this.currEnvScrollYVel = 0;
 
         // Place tile sprites
         this.myBackground = this.add.tileSprite(0, -globalGame.config.height, globalGame.config.width, globalGame.config.height*2, "volcanicBackground").setOrigin(0);
@@ -98,18 +111,18 @@ class Play extends Phaser.Scene {
         // Jumping mechanics
         upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         upKey.on("down", () => {
-            console.log("Jumping");
+            
+            // Normally, checking whether or not a character is on ground like this would be bad.
+            // But here, it works.
             if ((this.playerChar.body.y + this.playerChar.body.halfHeight) == this.playerStartPosY
             && !this.obstacleInRange) {
+                console.log("Jumping");
                 this.playerChar.body.setVelocityY(-400);
             }
         }
         );
 
-        this.collectiblesTextures = ["crystal_red", "crystal_green", "crystal_blue", "crystal_purple"];
-
         // Variables to handle the lava
-        this.baseTimeForLevel = 10000;
         this.currTimeForLevel = this.baseTimeForLevel;
         this.lavaRisingTweenConfig = {
             from: globalGame.config.height * 1.25,
@@ -127,41 +140,25 @@ class Play extends Phaser.Scene {
         }
         this.lavaRisingTween = this.tweens.addCounter(this.lavaRisingTweenConfig);
 
-        // Variables for game balancing
-        this.currLevel = 1;
-        this.minTimeForLevel = 4000;
-        this.levelDifficultyScale = 1.25;
-        this.fractionOfLevelTimeForCombo = (3/8);
 
-        this.baseEnvScrollXVel = -192;
-        this.maxEnvScrollXVel = -1600;
-        this.envScrollXVelIncrement = -32;
         // The platforms left to spawn on the current level before the platforms near an enemy are spawned
         this.platformsLeftToSpawnOnCurrLevel = this.calculatePlatformsNeededBeforeCombo(this.platform1BaseWidth, this.baseEnvScrollXVel, this.baseTimeForLevel * (1-this.fractionOfLevelTimeForCombo));
         this.platformsSpawnedOnNextLevel = 0;
         this.numPlatformsInEmptyStretch = 2;
 
-        //this.obstacleTimerConfig = {
-        //    delay: (2 + Math.random() * 0) * 1000,
-        //    callback: () => {this.startEncounter();
-
-        //    }
-        //}
-        //this.obstacleTimer;
-
         this.obstacleInRange = false;
 
-        // Create first starting platform 2 platform widths behind right side of player character
-        this.createStartingPlatforms(this.getPhysBounds(this.playerChar).right - (2 * this.platform1BaseWidth));
+        // Create first starting platform 1 platform widths behind right side of player character
+        this.createStartingPlatforms(this.getPhysBounds(this.playerChar).right - (1 * this.platform1BaseWidth));
         // Account for platforms spawned behind player character
-        this.platformsLeftToSpawnOnCurrLevel += 2;
+        this.platformsLeftToSpawnOnCurrLevel += 1;
 
         // Layering
         this.lavaRenderTexture.setDepth(3);
         this.playerChar.setDepth(2);
         this.activePlatformGroup.setDepth(1);
 
-        // Add a scorekeeper (currently doesn't work)
+        // Add a scorekeeper
         this.scorekeeper = new Scorekeeper({
             scene: this,
             x: 24,
@@ -170,7 +167,12 @@ class Play extends Phaser.Scene {
         this.scorekeeper.setVisible(false);
         this.scorekeeper.setDepth(20);
 
-
+        // Cosmetic things
+        this.collectiblesTextures = ["crystal_red", "crystal_green", "crystal_blue", "crystal_purple"];
+        this.defaultPlayerPlatColliderCallback = (object1, object2) => {
+            object2.setData("steppedOn", true);
+        };
+        this.playerAndPlatformCollider.collideCallback = this.defaultPlayerPlatColliderCallback;
 
 
 
@@ -193,9 +195,7 @@ class Play extends Phaser.Scene {
         
         // Check collisions using Arcade Physics
 
-        // Update current onscreen and offscreen platforms
-        //this.currEnvScrollXVel = this.currEnvScrollXVel <= -1000 ? -100 : this.currEnvScrollXVel - 500;
-        //console.log(this.platformPool.getLength(), this.activePlatformGroup.getLength());
+        
         //this.currEnvScrollXVel = this.currEnvScrollXVel == -1000 ? -1000 : -1000; // breaks spawning; might need to add upcoming platforms to group that gets updated after spawning
                 
 
@@ -261,17 +261,22 @@ class Play extends Phaser.Scene {
         this.lavaRenderTexture.draw(this.lavaBottom, 0, this.lavaTop.height);
 
         //console.log("this.currEnvScrollXVel: " + this.currEnvScrollXVel);
-        //console.log("this.currEnvScrollYVel: " + this.currEnvScrollYVel);
         //console.log(this.playerChar.x)
+
+        // Update current onscreen and offscreen platforms
         for (let platform of this.activePlatformGroup.getChildren()) {
-            if ((platform.x + platform.displayWidth) < this.leftBoundPlatformCutoff) {
+            if ((platform.x + platform.displayWidth) < this.leftBoundPlatformCutoff
+            || platform.y > globalGame.config.height) {
                 this.activePlatformGroup.killAndHide(platform);
                 this.activePlatformGroup.remove(platform);
                 continue;
             }
             
+            // Platform falling effect
+            if ((platform.x + platform.displayWidth) < this.playerChar.x) {
+                this.platformFallEffect(platform);
+            }
             platform.body.setVelocityX(this.currEnvScrollXVel);
-            platform.body.setVelocityY(this.currEnvScrollYVel);
         }
     }
     
@@ -293,9 +298,10 @@ class Play extends Phaser.Scene {
             platformToSpawn.setDisplaySize(this.platform1BaseWidth, this.defaultPlatformBodyHeight);
             platformToSpawn.setPushable(false);
 
-            platformToSpawn.body.checkCollision.left = false;
-            platformToSpawn.body.checkCollision.down = false;
+            platformToSpawn.body.checkCollision.up = true;
             platformToSpawn.body.checkCollision.right = false;
+            platformToSpawn.body.checkCollision.down = false;
+            platformToSpawn.body.checkCollision.left = false;
 
             this.activePlatformGroup.add(platformToSpawn);
         }
@@ -309,6 +315,14 @@ class Play extends Phaser.Scene {
         //
         
         platformToSpawn.body.setVelocityX(this.currEnvScrollXVel);
+        
+        // Prepare platform for falling after going past Jeb
+        platformToSpawn.setDisplayOrigin(0);
+        platformToSpawn.setGravity(0,0);
+        platformToSpawn.setAngle(0);
+        platformToSpawn.setData("falling", false);
+        platformToSpawn.setData("steppedOn", false);
+
         this.rightmostPlatform = platformToSpawn;
         if (platformToSpawn.x > this.rightmostPlatform.x) {this.rightmostPlatform = platformToSpawn;}
         if (spawnOnCurrLevel) {
@@ -371,9 +385,10 @@ class Play extends Phaser.Scene {
     }
 
     // Place key combo
-    placeKeyCombo(x, y) { // x,y coordinates of where the arrows apear horizontally
+    placeKeyCombo(x, y, comboLength = 4) { // x,y coordinates of where the arrows apear horizontally
         let CorrectInputNum = 0;
-        //add sprites to the scene 
+        //add sprites to the scene
+        /*
         this.Arrow1 = new KeyComboArrow(this, x, y, 'promtedArrow', 0); // dont set origin to (0,0) or rotation wont work properly
         this.Arrow1.rotateArrow();
         this.Arrow2 = new KeyComboArrow(this, x + this.Arrow1.width + this.Arrow1.width/15, y, 'promtedArrow', 0);
@@ -382,28 +397,57 @@ class Play extends Phaser.Scene {
         this.Arrow3.rotateArrow();
         this.Arrow4 = new KeyComboArrow(this, x + (this.Arrow1.width*3) + (this.Arrow1.width/15)*3, y, 'promtedArrow', 0);
         this.Arrow4.rotateArrow();
-        // Bring arrows to foreground
-        this.Arrow1.setDepth(10);
-        this.Arrow2.setDepth(10);
-        this.Arrow3.setDepth(10);
-        this.Arrow4.setDepth(10);
+        */
+        this.keyComboArrows = [];
+        let arrowWidth = this.textures.get("promtedArrow").getSourceImage().width;
+        for (let i = 0; i < comboLength; i++) {
+            let newArrow = new KeyComboArrow(this, x + (arrowWidth + arrowWidth/15) * i, y, 'promtedArrow', 0);
+            newArrow.rotateArrow();
+            // Bring new arrow to foreground
+            newArrow.setDepth(10);
+            this.keyComboArrows.push(newArrow);
+        }
+        // Center the arrows around the provided x parameter
+        let xOffset = x - Phaser.Math.Average([this.keyComboArrows.at(0).x, this.keyComboArrows.at(-1).x]);
+        this.keyComboArrows.forEach((arrow) => {arrow.x += xOffset;});
+
         // create a keycombo based on the current orientation of the randomly rotated keys
-        let keyComboNeeded = this.input.keyboard.createCombo([this.Arrow1.getDirection(), this.Arrow2.getDirection(), this.Arrow3.getDirection(), this.Arrow4.getDirection()], {
+        let keyComboNeeded = this.input.keyboard.createCombo(Array.from(this.keyComboArrows, a => a.getDirection()), {
             resetOnWrongKey: true,  // if they press the wrong key is the combo reset?
             maxKeyDelay: 0,         // max delay (ms) between each key press (0 = disabled)
             deleteOnMatch: true    // if combo matches, will it delete itself?
         });
+
+        // Update textures of the arrows every 1/60th of a second
+        let keyComboUpdateTimer = this.time.addEvent({
+            delay: 1000/60,
+            callback: () => {
+                for (let i = 0; i < this.keyComboArrows.length; i++) {
+                    if (i < keyComboNeeded.index) {
+                        this.keyComboArrows[i].changeToPassingSprite();
+                    }
+                    else {
+                        this.keyComboArrows[i].changeToUnpassedSprite();
+                    }
+                }
+            },
+            loop: true
+        });
+
         // watch for keycombomatches
         this.input.keyboard.on('keycombomatch', (combo, event) => {
             if (combo === keyComboNeeded) { 
                 console.log('change arrow sprites to their passed sprite')
-                this.Arrow1.changeToPassingSprite();
-                this.Arrow2.changeToPassingSprite();
-                this.Arrow3.changeToPassingSprite();
-                this.Arrow4.changeToPassingSprite();
+                this.keyComboArrows.forEach((arrow) => arrow.changeToPassingSprite());
 
                 this.scorekeeper.addScoreForLevelIncrease(this.currLevel);
                 this.playJumpingToNextLevelAnim();
+
+                keyComboUpdateTimer.destroy();
+                // When matched, delete the arrows after one second
+                this.time.delayedCall(1000, () => {
+                    this.keyComboArrows.forEach((arrow) => {arrow.destroy();});
+                });
             }
         });
     }
@@ -437,16 +481,7 @@ class Play extends Phaser.Scene {
     playJumpingToNextLevelAnim() {
         
         //this.platformsLeftToSpawnOnCurrLevel = Infinity;
-        // destroy arrow sprites
-        this.time.delayedCall(
-            1000,
-            () => {
-                this.Arrow1.destroy();
-                this.Arrow2.destroy();
-                this.Arrow3.destroy();
-                this.Arrow4.destroy();
-            }
-        );
+
         // Don't let lava rise anymore
         this.lavaRisingTween.pause();
         // Define a collider callback function for once the player lands on the next level and remove it after the player lands
@@ -492,10 +527,7 @@ class Play extends Phaser.Scene {
                 this.currLevel += 1;
                 this.resetLavaForNextLevel();
 
-                //this.obstacleTimer = this.time.addEvent(this.obstacleTimerConfig);
-
                 let platformsNeeded = this.calculatePlatformsNeededBeforeCombo(this.platform1BaseWidth, this.currEnvScrollXVel, this.currTimeForLevel * (1-this.fractionOfLevelTimeForCombo));
-                // NEED TO START COUNTING SPAWNED PLATFORMS STARTING FROM THE NEXT PLATFORM AFTER THE ONE JEB LANDS ON
                 this.platformsLeftToSpawnOnCurrLevel = platformsNeeded - (this.platformsSpawnedOnNextLevel - numPlatformsToIgnore);
                 this.platformsSpawnedOnNextLevel = 0;
                 this.setKeyComboPlacementTimer(this.currTimeForLevel * (1-this.fractionOfLevelTimeForCombo));
@@ -507,7 +539,7 @@ class Play extends Phaser.Scene {
                 this.obstacleInRange = false;
 
             });
-            this.playerAndPlatformCollider.collideCallback = undefined;
+            this.playerAndPlatformCollider.collideCallback = this.defaultPlayerPlatColliderCallback;
             
         };
 
@@ -545,7 +577,7 @@ class Play extends Phaser.Scene {
         this.keyComboPlacementTimer = this.time.delayedCall(
             timeUntilPlacement,
             () => {
-                this.placeKeyCombo(this.playerStartPosX - 96, globalGame.config.height * 0.75);
+                this.placeKeyCombo(this.playerStartPosX, globalGame.config.height * 0.75, Math.min(1 + Math.ceil(this.currLevel/2), 4));
             }
         )
     }
@@ -581,7 +613,6 @@ class Play extends Phaser.Scene {
         this.playerChar.setGravity(0, 800);
 
         this.playerChar.playRunningAnim();
-        //this.obstacleTimer = this.time.addEvent(this.obstacleTimerConfig);
         this.lavaRisingTween.play();
         
         this.setKeyComboPlacementTimer(this.currTimeForLevel * (1-this.fractionOfLevelTimeForCombo));
@@ -614,5 +645,22 @@ class Play extends Phaser.Scene {
         
         console.log("Platforms needed: " + Math.ceil(timeBeforeCombo / timePerPlatform));
         return Math.ceil(timeBeforeCombo / timePerPlatform);
+    }
+
+    // Makes a platform do a falling animation
+    platformFallEffect(platform) {
+        // If this platform is already falling or wasn't stepped on, return
+        if (platform.getData("falling") == true || platform.getData("steppedOn") == false) {
+            return;
+        }
+
+        platform.setData("falling", true);
+
+        // Set origin and account for offset
+        platform.setDisplayOrigin(platform.width, 0);
+        platform.setX(platform.x + platform.width);
+
+        platform.setGravity(0, 800);
+        platform.setAngularVelocity(Phaser.Math.Between(-16, -64));
     }
 }

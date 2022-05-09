@@ -48,9 +48,15 @@ class Menu extends Phaser.Scene {
         menuConfig.fontSize = 16;
         menuConfig.color = '#FFFFFF';
         this.playButton = this.add.sprite(globalGameConfig.width/2.8, globalGameConfig.height/1.47, "playButton").setOrigin(.5);
-        this.add.text(globalGameConfig.width/2.8, globalGameConfig.height/1.47,'PLAY', menuConfig).setOrigin(.5);
+        this.playButtonText = this.add.text(globalGameConfig.width/2.8, globalGameConfig.height/1.47,'PLAY', menuConfig).setOrigin(.5);
         this.creditsButton = this.add.sprite(globalGameConfig.width/1.60, globalGameConfig.height/1.47, "creditsButton").setOrigin(.5);
-        this.add.text(globalGameConfig.width/1.59, globalGameConfig.height/1.47,'CREDITS', menuConfig).setOrigin(.5);
+        this.creditsButtonText = this.add.text(globalGameConfig.width/1.59, globalGameConfig.height/1.47,'CREDITS', menuConfig).setOrigin(.5);
+
+        // Adjusting positions of buttons to prevent tangent line with platforms (you can remove this if you'd like)
+        this.playButton.y += this.playButton.height/4;
+        this.playButtonText.y += this.playButton.height/4;
+        this.creditsButton.y += this.creditsButton.height/4;
+        this.creditsButtonText.y += this.creditsButton.height/4;
         // set button sprites as interactibles 
         this.playButton.setInteractive();
         this.creditsButton.setInteractive();
