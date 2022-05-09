@@ -633,6 +633,7 @@ class Play extends Phaser.Scene {
 
     endGameplay() {
         let losingAnimTime = this.playerChar.playLossAnim();
+        this.scene.launch("gameOverScene");
         this.time.delayedCall(losingAnimTime,
             () => {
                 // COMPLETE THIS

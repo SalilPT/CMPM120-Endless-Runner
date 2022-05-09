@@ -7,8 +7,8 @@ class Credits extends Phaser.Scene {
 
     }
     preload() {
-        //this.load.spritesheet("volcanicBackground", "./assets/background sprite sheet (3 frames) 384x128.png", {frameWidth: 384/3, frameHeight: 128});
     }
+    
     create() {
         console.log("started the credits scene")
         this.myBackground = this.add.tileSprite(0, -globalGame.config.height, globalGame.config.width, globalGame.config.height*2, "volcanicBackground").setOrigin(0);
