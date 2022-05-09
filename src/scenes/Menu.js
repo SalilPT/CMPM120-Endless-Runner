@@ -22,7 +22,7 @@ class Menu extends Phaser.Scene {
         this.load.spritesheet("jebRunningSpritesheet", "./assets/running spritesheet 64 pixels a frame.png", {frameWidth: 64});
         this.load.spritesheet("jebDeathSpritesheet", "./assets/Jeb Death Spritesheet 64x64.png", {frameWidth:64});
         this.load.spritesheet("jebIdleSpritesheet", "./assets/Jeb Idle Spritesheet 64x64.png", {frameWidth:64});
-        this.load.spritesheet("jebJumpingSpritesheet", "./assets/Jeb jumping Spritesheet 64W x 68H.png", {frameWidth:64, frameHeight:68});
+        this.load.spritesheet("jebJumpingSpritesheet", "./assets/jeb jumping spirtesheet 64W x 68H.png", {frameWidth:64, frameHeight:68});
         this.load.spritesheet("jebAttackSpritesheet", "./assets/Jeb Attack Spritesheet 64W x 78H.png", {frameWidth:64, frameHeight:78});
 
         // Load UI buttons
