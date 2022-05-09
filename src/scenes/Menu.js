@@ -30,6 +30,15 @@ class Menu extends Phaser.Scene {
         this.load.image("creditsButton", "./assets/creditsButton.png")
         this.load.image("titleButton", "./assets/titleButton.png")
         // Load audio assets
+        this.load.audio('jebJump1', './assets/audio/Jump1.wav');
+        this.load.audio('jebJump2', './assets/audio/Jump2.wav');
+        this.load.audio('jebDeath', './assets/audio/Jeb Death.wav');
+        this.load.audio('jebLaser', './assets/audio/Jeb Laser.wav');
+        this.load.audio('itemPickup', './assets/audio/Item Pickup sound.wav');
+        this.load.audio('globlinDeath1', './assets/audio/Globlin Death 1.wav');
+        this.load.audio('globlinDeath2', './assets/audio/Globlin Death 2.wav');
+        this.load.audio('globlinDeath3', './assets/audio/Globlin Death 3.wav');
+        this.load.audio('buttonSound', './assets/audio/Button Sound.wav');
     }
 
     create() {
