@@ -64,7 +64,7 @@ class Play extends Phaser.Scene {
             scene: this,
             x: this.playerStartPosX,
             y: this.playerStartPosY,
-            texture: "scientist",
+            texture: "jebRunningSpritesheet",
             frame: 0
         }
         this.playerChar = new Scientist(playerCharArgs).setOrigin(0.5);
@@ -192,12 +192,10 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+        // keeps track of when to play running animation
         if ((this.playerChar.body.y + this.playerChar.body.halfHeight) == this.playerStartPosY
         && this.currEnvScrollXVel < 0){
             this.playerChar.playRunningAnim();
-            if (this.obstacleInRange) {
-                this.playerChar.playIdleAnim();
-            }
         }
             // Check collisions using Arcade Physics
 
@@ -221,7 +219,8 @@ class Play extends Phaser.Scene {
             if (this.getPhysBounds(this.enemyTriggerPlatform).x - this.getPhysBounds(this.playerChar).right <= this.platform1BaseWidth/2
             && !this.obstacleInRange) {
                 //this.currEnvScrollXVel = 0;
-                this.obstacleInRange = true;                
+                this.obstacleInRange = true;
+                this.playerChar.playIdleAnim();                
 
                 /*
                 // TRY TO SLOW DOWN PLATFORMS AS PLAYER APPOACHES ENEMY
@@ -520,11 +519,14 @@ class Play extends Phaser.Scene {
 
         // Play an animation of defeating enemy and then make player character jump
         console.warn("ANIMATION OF JEB FIRING LASER WOULD GO HERE");
+        console.log(this.playerChar.displayOriginY);
+        this.playerChar.playAttackObstacleAnim();
+        //this.playerChar.displayOriginY(this.playerChar.width/2, this.textures.get("jebRunningSpritesheet").getSourceImage().height - this.textures.get("jebAttackSpritesheet").getSourceImage().height);
+        console.log(this.playerChar.displayOriginY);
         this.time.delayedCall(
-            1000,
+            2000,
             () => {
                 this.currEnvScrollXVel = Math.max(this.baseEnvScrollXVel + this.envScrollXVelIncrement * this.currLevel, this.maxEnvScrollXVel);
-                console.log("going to play the jumping anim")
                 this.playerChar.playJumpingAnim();
                 this.playerChar.setVelocityY(-600);
 

@@ -16,12 +16,14 @@ class Menu extends Phaser.Scene {
         this.load.spritesheet("lavaBottom", "./assets/Lava Bottom Spritesheet (4 frames).png", {frameWidth: 512/4, frameHeight: 64});
         // Load assets for Platforms and Scientist
         this.load.image("platform1", "./assets/Rock Platform 1 (Shadow)(128x74).png");
+        this.load.image("laser", "./assets/Jeb laserbeam 64W x 78H.png");
         
-        this.load.spritesheet("scientist", "./assets/running spritesheet 64 pixels a frame.png", {frameWidth: 64});
+        //this.load.spritesheet("scientist", "./assets/running spritesheet 64 pixels a frame.png", {frameWidth: 64});
         this.load.spritesheet("jebRunningSpritesheet", "./assets/running spritesheet 64 pixels a frame.png", {frameWidth: 64});
         this.load.spritesheet("jebDeathSpritesheet", "./assets/Jeb Death Spritesheet 64x64.png", {frameWidth:64});
         this.load.spritesheet("jebIdleSpritesheet", "./assets/Jeb Idle Spritesheet 64x64.png", {frameWidth:64});
-        this.load.spritesheet("jebJumpingSpritesheet", "./assets/Jeb jumping Spritesheet 64W x 68H.png", {frameWidth:64, frameHeight:67});
+        this.load.spritesheet("jebJumpingSpritesheet", "./assets/Jeb jumping Spritesheet 64W x 68H.png", {frameWidth:64, frameHeight:68});
+        this.load.spritesheet("jebAttackSpritesheet", "./assets/Jeb Attack Spritesheet 64W x 78H.png", {frameWidth:64, frameHeight:78});
 
         // Load UI buttons
         this.load.image("playButton", "./assets/playButton.png");

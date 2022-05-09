@@ -23,7 +23,7 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
             frameRate: 12,
         })
         this.scene.anims.create({
-            key: 'jebIdle',
+            key: "jebIdle",
             frames: this.anims.generateFrameNumbers("jebIdleSpritesheet", {start:0}),
             frameRate: 8,
             repeat: -1
@@ -32,6 +32,11 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
             key: "jebJumping",
             frames: this.scene.anims.generateFrameNumbers("jebJumpingSpritesheet", {start:0}),
             frameRate: 16
+        })
+        this.scene.anims.create({
+            key: "jebAttack",
+            frames: this.scene.anims.generateFrameNumbers("jebAttackSpritesheet"),
+            frameRate: 12
         })
     }
 
@@ -65,6 +70,7 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
     }
 
     playAttackObstacleAnim() {
+        this.anims.play("jebAttack");
 
     }
 
