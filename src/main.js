@@ -15,7 +15,7 @@ let globalGameConfig = {
         }
     },
     //scene: [Menu, Credits, Play]
-    scene: [Menu, Play, Credits]
+    scene: [Menu, Play, Credits, GameOver]
 }
 
 let globalGame = new Phaser.Game(globalGameConfig);
