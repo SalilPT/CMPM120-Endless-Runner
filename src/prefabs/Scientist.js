@@ -84,6 +84,10 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
     playAttackObstacleAnim() {
         this.anims.play("jebAttack");
         this.laserSound.play({rate:2, detune:-1200});
+        //this.laserBeam = this.scene.phsysics.add.sprite(this.scene.playerChar.x, this.scene.playerChar.y, "laser", 0);
+        //for (let i = 0; i < 10; i++) {
+        //    this.laserBeam.x += 1;
+        //}
 
     }
 

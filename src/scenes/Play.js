@@ -71,13 +71,13 @@ class Play extends Phaser.Scene {
         this.lavaRenderTexture.draw(this.lavaBottom, 0, this.lavaTop.height);
 
         // Variables for player character
-        this.playerStartPosX = globalGame.config.width / 2;
-        this.playerStartPosY = globalGame.config.height / 2;
+        this.playerStartPosX = globalGame.config.width / 2 ;
+        this.playerStartPosY = globalGame.config.height / 2 ;
         let playerCharArgs = {
             scene: this,
             x: this.playerStartPosX,
             y: this.playerStartPosY,
-            texture: "scientist",
+            texture: "jebRunningSpritesheet",
             frame: 0
         }
         this.playerChar = new Scientist(playerCharArgs).setOrigin(0.5);
@@ -153,9 +153,17 @@ class Play extends Phaser.Scene {
         this.createStartingPlatforms(this.getPhysBounds(this.playerChar).right - (1 * this.platform1BaseWidth));
         // Account for platforms spawned behind player character
         this.platformsLeftToSpawnOnCurrLevel += 1;
+        // create the globlin sprite
+        this.globlinSprite = new Obstacle(this, globalGame.config.width * 2, this.playerStartPosY, 'globlinAtlas', 0, {active:true}).setOrigin(.5);
+        this.globlinGroup = this.physics.add.group({
+            runChildUpdate: true    // run update method of all members in the group
+        });
+        this.globlinGroup.add(this.globlinSprite);
+        this.globlinSprite.playIdleAnim();
 
         // Layering
         this.lavaRenderTexture.setDepth(3);
+        this.globlinSprite.setDepth(2);
         this.playerChar.setDepth(2);
         this.activePlatformGroup.setDepth(1);
 
@@ -175,13 +183,7 @@ class Play extends Phaser.Scene {
         };
         this.playerAndPlatformCollider.collideCallback = this.defaultPlayerPlatColliderCallback;
 
-        // create the globlin sprite
-        this.globlinSprite = new Obstacle(this, globalGame.config.width * 2, this.playerStartPosY, 'globlinAtlas', 0, {active:true}).setOrigin(.5);
-        this.globlinGroup = this.physics.add.group({
-            runChildUpdate: true    // run update method of all members in the group
-        });
-        this.globlinGroup.add(this.globlinSprite);
-        this.globlinSprite.playIdleAnim();
+
 
 
 
@@ -467,7 +469,7 @@ class Play extends Phaser.Scene {
         this.globlinSprite.x = this.getPhysBounds(this.rightmostPlatform).right - this.platform1BaseWidth/1.7;
         this.globlinSprite.playIdleAnim();
         // REMOVE THIS LATER
-        this.enemyTriggerPlatform.setTint(0xFF0000);
+        //this.enemyTriggerPlatform.setTint(0xFF0000);
     }
 
     // Create the platforms at the start of the game
