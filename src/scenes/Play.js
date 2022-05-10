@@ -185,6 +185,7 @@ class Play extends Phaser.Scene {
 
         // Background Music
         this.backgroundMusic = this.sound.add("backgroundMusic");
+        this.backgroundMusic.setVolume(0.275);
     }
 
     update() {
@@ -642,7 +643,7 @@ class Play extends Phaser.Scene {
         });
         
         let backgroundMusicFadeOutTween = this.tweens.addCounter({
-            from: 1,
+            from: this.backgroundMusic.volume,
             to: 0,
             duration: 1 * 1000,
             ease: Phaser.Math.Easing.Quadratic.InOut,
