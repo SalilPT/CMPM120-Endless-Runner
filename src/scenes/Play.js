@@ -154,7 +154,7 @@ class Play extends Phaser.Scene {
         // Account for platforms spawned behind player character
         this.platformsLeftToSpawnOnCurrLevel += 1;
         // create the globlin sprite
-        this.globlinSprite = new Obstacle(this, globalGame.config.width * 2, this.playerStartPosY, 'globlinAtlas', 0, {active:true}).setOrigin(.5);
+        this.globlinSprite = new Obstacle(this, globalGame.config.width * 2, this.playerStartPosY - this.playerStartPosY/30, 'globlinAtlas', 0, {active:true}).setOrigin(.5);
         this.globlinGroup = this.physics.add.group({
             runChildUpdate: true    // run update method of all members in the group
         });
