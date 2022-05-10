@@ -24,6 +24,8 @@ class Menu extends Phaser.Scene {
         this.load.spritesheet("jebIdleSpritesheet", "./assets/Jeb Idle Spritesheet 64x64.png", {frameWidth:64});
         this.load.spritesheet("jebJumpingSpritesheet", "./assets/jeb jumping spirtesheet 64W x 68H.png", {frameWidth:64, frameHeight:68});
         this.load.spritesheet("jebAttackSpritesheet", "./assets/Jeb Attack Spritesheet 64W x 78H.png", {frameWidth:64, frameHeight:78});
+        //atlas loading
+        this.load.atlas("globlinAtlas", './assets/globlin.png', "./assets/globlin_atlas.json");
 
         // Load UI buttons
         this.load.image("playButton", "./assets/playButton.png");
@@ -41,7 +43,24 @@ class Menu extends Phaser.Scene {
         this.load.audio('buttonSound', './assets/audio/Button Sound.wav');
     }
 
-    create() {
+    create() {       
+        //this.globlinSprite = this.add.sprite(globalGameConfig.width/2, globalGameConfig.height/2, 'globlinAtlas');
+        //this.anims.create({
+        //    key: 'globlinIdleAnim',
+        //    frameRate: 8,
+        //    frames: this.anims.generateFrameNames('globlinAtlas',{
+        //    prefix: 'globlin_idle_f',
+        //    //suffix: '.png',
+        //    start:1,
+        //    end: 4
+        //    }),
+        //    repeat:-1
+        //});
+//
+        //this.globlinSprite.play('globlinIdleAnim');
+
+
+
         // menu text configuration
         let menuConfig = {
             fontFamily: "JebFont",

@@ -1,0 +1,164 @@
+{
+    "frames": [
+        {
+            "filename": "globlin_idle_f1",
+            "frame": {
+                "w": 96,
+                "h": 96,
+                "x": 0,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "globlin_idle_f3",
+            "frame": {
+                "w": 96,
+                "h": 96,
+                "x": 96,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "globlin_idle_f2",
+            "frame": {
+                "w": 96,
+                "h": 96,
+                "x": 0,
+                "y": 96
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "globlin_idle_f4",
+            "frame": {
+                "w": 96,
+                "h": 96,
+                "x": 96,
+                "y": 96
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "globlin_death_f3",
+            "frame": {
+                "w": 96,
+                "h": 96,
+                "x": 192,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "globlin_death_f5",
+            "frame": {
+                "w": 96,
+                "h": 96,
+                "x": 192,
+                "y": 96
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "globlin_death_f4",
+            "frame": {
+                "w": 96,
+                "h": 96,
+                "x": 0,
+                "y": 192
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "globlin_death_f1",
+            "frame": {
+                "w": 96,
+                "h": 96,
+                "x": 96,
+                "y": 192
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "globlin_death_f6",
+            "frame": {
+                "w": 96,
+                "h": 96,
+                "x": 192,
+                "y": 192
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "globlin_death_f7",
+            "frame": {
+                "w": 96,
+                "h": 96,
+                "x": 288,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "globlin_death_f2",
+            "frame": {
+                "w": 96,
+                "h": 96,
+                "x": 288,
+                "y": 96
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "globlin_death_f8",
+            "frame": {
+                "w": 96,
+                "h": 96,
+                "x": 288,
+                "y": 192
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        }
+    ],
+    "meta": {
+        "description": "Atlas generado con Atlas Packer Gamma V2",
+        "web": "https://gammafp.github.io/atlas-packer-phaser/"
+    }
+}

@@ -21,23 +21,23 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
             key: "jebLosing",
             frames: this.anims.generateFrameNumbers("jebDeathSpritesheet", {start:0}),
             frameRate: 12,
-        })
+        });
         this.scene.anims.create({
             key: "jebIdle",
             frames: this.anims.generateFrameNumbers("jebIdleSpritesheet", {start:0}),
             frameRate: 8,
             repeat: -1
-        })
+        });
         this.scene.anims.create({
             key: "jebJumping",
             frames: this.scene.anims.generateFrameNumbers("jebJumpingSpritesheet", {start:0}),
             frameRate: 16
-        })
+        });
         this.scene.anims.create({
             key: "jebAttack",
             frames: this.scene.anims.generateFrameNumbers("jebAttackSpritesheet"),
             frameRate: 12
-        })
+        });
         //audios
         this.rnd = Phaser.Math.RND;
         this.jumpArr = [];

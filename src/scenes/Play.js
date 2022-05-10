@@ -34,7 +34,7 @@ class Play extends Phaser.Scene {
         this.maxEnvScrollXVel = -1600;
         this.envScrollXVelIncrement = -32;
         //////////
-
+        this.gameplayRunning = false;
         this.platformSpawnRightThreshold = globalGame.config.width + this.textures.get("platform1").getSourceImage().width;
         //this.platformSpawnRightThreshold = globalGame.config.width * .76;
         // Platform pooling code adapted from code by Emanuele Feronato: https://www.emanueleferonato.com/2018/11/13/build-a-html5-endless-runner-with-phaser-in-a-few-lines-of-code-using-arcade-physics-and-featuring-object-pooling/ 
@@ -175,6 +175,14 @@ class Play extends Phaser.Scene {
             object2.setData("steppedOn", true);
         };
         this.playerAndPlatformCollider.collideCallback = this.defaultPlayerPlatColliderCallback;
+
+        // create the globlin sprite
+        this.globlinSprite = new Obstacle(this, this.getPhysBounds(this.rightmostPlatform).right - (this.platform1BaseWidth/1.80), this.playerStartPosY, 'globlinAtlas', 0, {active:true}).setOrigin(.5);
+        this.globlinGroup = this.physics.add.group({
+            runChildUpdate: true    // run update method of all members in the group
+        });
+        this.globlinGroup.add(this.globlinSprite);
+        this.globlinSprite.playIdleAnim();
 
 
 
@@ -428,12 +436,14 @@ class Play extends Phaser.Scene {
         let keyComboUpdateTimer = this.time.addEvent({
             delay: 1000/60,
             callback: () => {
-                for (let i = 0; i < this.keyComboArrows.length; i++) {
-                    if (i < keyComboNeeded.index) {
-                        this.keyComboArrows[i].changeToPassingSprite();
-                    }
-                    else {
-                        this.keyComboArrows[i].changeToUnpassedSprite();
+                if (this.gameplayRunning ==true){
+                    for (let i = 0; i < this.keyComboArrows.length; i++) {
+                        if (i < keyComboNeeded.index) {
+                            this.keyComboArrows[i].changeToPassingSprite();
+                        }
+                        else {
+                            this.keyComboArrows[i].changeToUnpassedSprite();
+                        }
                     }
                 }
             },
@@ -442,7 +452,7 @@ class Play extends Phaser.Scene {
 
         // watch for keycombomatches
         this.input.keyboard.on('keycombomatch', (combo, event) => {
-            if (combo === keyComboNeeded) { 
+            if (combo === keyComboNeeded && this.gameplayRunning == true) { 
                 console.log('change arrow sprites to their passed sprite')
                 this.keyComboArrows.forEach((arrow) => arrow.changeToPassingSprite());
 
@@ -629,11 +639,13 @@ class Play extends Phaser.Scene {
         this.setKeyComboPlacementTimer(this.currTimeForLevel * (1-this.fractionOfLevelTimeForCombo));
 
         this.scorekeeper.setVisible(true);
+        this.gameplayRunning = true;
     }
 
     endGameplay() {
         let losingAnimTime = this.playerChar.playLossAnim();
         this.scene.launch("gameOverScene");
+        this.gameplayRunning = false;
         this.time.delayedCall(losingAnimTime,
             () => {
                 // COMPLETE THIS
