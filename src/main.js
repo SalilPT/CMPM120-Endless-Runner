@@ -8,11 +8,11 @@ Gustavo Cruz Martinez
 Miles Katlin
 Salil Tantamjarik
 
-Date Completed: May ???, 2022
+Date Completed: May ???, 2022 // TODO: CHANGE THIS
 
 Game Title: "Jeb's Infernal Escape"
 
-Interesting Technical Features:
+Interesting Technical Features: // TODO: add files and line numbers for where these are
 - Used the launch() method run the Menu and Play scenes in parallel
 - Used object pooling for platforms
 - Used a render texture for the lava
