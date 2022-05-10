@@ -44,20 +44,20 @@ class Menu extends Phaser.Scene {
     }
 
     create() {       
-        this.globlinSprite = this.add.sprite(globalGameConfig.width/2, globalGameConfig.height/2, 'globlinAtlas');
-        this.anims.create({
-            key: 'globlinIdleAnim',
-            frameRate: 8,
-            frames: this.anims.generateFrameNames('globlinAtlas',{
-            prefix: 'globlin_idle_f',
-            //suffix: '.png',
-            start:1,
-            end: 4
-            }),
-            repeat:-1
-        });
-
-        this.globlinSprite.play('globlinIdleAnim');
+        //this.globlinSprite = this.add.sprite(globalGameConfig.width/2, globalGameConfig.height/2, 'globlinAtlas');
+        //this.anims.create({
+        //    key: 'globlinIdleAnim',
+        //    frameRate: 8,
+        //    frames: this.anims.generateFrameNames('globlinAtlas',{
+        //    prefix: 'globlin_idle_f',
+        //    //suffix: '.png',
+        //    start:1,
+        //    end: 4
+        //    }),
+        //    repeat:-1
+        //});
+//
+        //this.globlinSprite.play('globlinIdleAnim');
 
 
 

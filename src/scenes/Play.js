@@ -176,6 +176,14 @@ class Play extends Phaser.Scene {
         };
         this.playerAndPlatformCollider.collideCallback = this.defaultPlayerPlatColliderCallback;
 
+        // create the globlin sprite
+        this.globlinSprite = new Obstacle(this, this.getPhysBounds(this.rightmostPlatform).right - (this.platform1BaseWidth/1.80), this.playerStartPosY, 'globlinAtlas', 0, {active:true}).setOrigin(.5);
+        this.globlinGroup = this.physics.add.group({
+            runChildUpdate: true    // run update method of all members in the group
+        });
+        this.globlinGroup.add(this.globlinSprite);
+        this.globlinSprite.playIdleAnim();
+
 
 
 
@@ -633,6 +641,7 @@ class Play extends Phaser.Scene {
 
     endGameplay() {
         let losingAnimTime = this.playerChar.playLossAnim();
+        this.scene.pause();
         this.scene.launch("gameOverScene");
         this.time.delayedCall(losingAnimTime,
             () => {
