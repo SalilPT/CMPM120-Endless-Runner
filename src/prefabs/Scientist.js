@@ -36,7 +36,7 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
         this.scene.anims.create({
             key: "jebAttack",
             frames: this.scene.anims.generateFrameNumbers("jebAttackSpritesheet"),
-            frameRate: 12
+            frameRate: 14
         });
         //audios
         this.rnd = Phaser.Math.RND;

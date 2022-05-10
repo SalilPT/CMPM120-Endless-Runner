@@ -177,12 +177,12 @@ class Play extends Phaser.Scene {
         this.playerAndPlatformCollider.collideCallback = this.defaultPlayerPlatColliderCallback;
 
         // create the globlin sprite
-        /*this.globlinSprite = new Obstacle(this, this.getPhysBounds(this.rightmostPlatform).right - (this.platform1BaseWidth/1.80), this.playerStartPosY, 'globlinAtlas', 0, {active:true}).setOrigin(.5);
+        this.globlinSprite = new Obstacle(this, globalGame.config.width * 2, this.playerStartPosY, 'globlinAtlas', 0, {active:true}).setOrigin(.5);
         this.globlinGroup = this.physics.add.group({
             runChildUpdate: true    // run update method of all members in the group
         });
         this.globlinGroup.add(this.globlinSprite);
-        this.globlinSprite.playIdleAnim();*/
+        this.globlinSprite.playIdleAnim();
 
 
 
@@ -474,8 +474,9 @@ class Play extends Phaser.Scene {
         for (let i = 0; i < numPlatformsToSpawn - 1; i++) {
             this.spawnPlatform(this.getPhysBounds(this.rightmostPlatform).right, this.platformSpawnYCoord);
         }
-        
         this.enemyTriggerPlatform = this.spawnPlatform(this.getPhysBounds(this.rightmostPlatform).right, this.platformSpawnYCoord);
+        this.globlinSprite.x = this.getPhysBounds(this.rightmostPlatform).right - this.platform1BaseWidth/1.7;
+        this.globlinSprite.playIdleAnim();
         // REMOVE THIS LATER
         this.enemyTriggerPlatform.setTint(0xFF0000);
     }
@@ -560,11 +561,11 @@ class Play extends Phaser.Scene {
         };
 
         // Play an animation of defeating enemy and then make player character jump
-        console.warn("ANIMATION OF JEB FIRING LASER WOULD GO HERE");
-        console.log(this.playerChar.displayOriginY);
+        console.log('jeb fires laser')
         this.playerChar.playAttackObstacleAnim();
-        //this.playerChar.displayOriginY(this.playerChar.width/2, this.textures.get("jebRunningSpritesheet").getSourceImage().height - this.textures.get("jebAttackSpritesheet").getSourceImage().height);
-        console.log(this.playerChar.displayOriginY);
+        this.time.delayedCall(900, ()=> {
+            this.globlinSprite.playDeathAnim();
+        });
         this.time.delayedCall(
             2000,
             () => {
