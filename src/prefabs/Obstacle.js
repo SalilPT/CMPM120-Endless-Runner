@@ -13,6 +13,7 @@ class Obstacle extends Phaser.Physics.Arcade.Sprite {
             start:1,
             end: 4
             }),
+            showOnStart: true,
             repeat:-1
         });
         this.anims.create({
@@ -22,23 +23,23 @@ class Obstacle extends Phaser.Physics.Arcade.Sprite {
             prefix: 'globlin_death_f',
             //suffix: '.png',
             start:1,
-            end: 8
+            end: 8,
             }),
-            //repeat:-1
+            hideOnComplete: true
         });
     }
     update (){
         this.setVelocityX(this.scene.currEnvScrollXVel)
         if (this.x <= 0 - this.width) {
-            this.destroy();
+            //this.destroy();
         }
     }
     playIdleAnim(){
         this.anims.play('globlinIdleAnim', 1);
     }
+
     playDeathAnim() {
-        this.anims.play('globlinDeathAnim').on('animationcomplete', () => {
-            this.destroy();
-        });;
-    }
+        this.anims.play('globlinDeathAnim').on('animationcomplete', ()=>{
+        });
+    }   
 }
