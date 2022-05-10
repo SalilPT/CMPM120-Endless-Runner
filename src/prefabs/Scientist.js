@@ -89,6 +89,9 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
             for (let i = 0; i < 10; i++) {
                 this.laserBeam.setVelocityX(350);
             }
+            if (this.laserBeam.x > globalGameConfig.width){
+                this.laserBeam.destroy();
+            }
         });
 
     }
