@@ -63,10 +63,10 @@ class Play extends Phaser.Scene {
         this.myBackgroundTimer = this.createTileSpriteAnimTimer(this.myBackground, 3, 4);
         this.lavaTop = this.add.tileSprite(0, globalGame.config.height, globalGame.config.width, 50, "lavaTop", 0).setOrigin(0);
         this.lavaTopAnimTimer = this.createTileSpriteAnimTimer(this.lavaTop, 4, 4);
-        this.lavaBottom = this.add.tileSprite(0, globalGame.config.height, globalGame.config.width, globalGame.config.height, "lavaBottom", 0).setOrigin(0);
+        this.lavaBottom = this.add.tileSprite(0, globalGame.config.height, globalGame.config.width, globalGame.config.height * 2, "lavaBottom", 0).setOrigin(0);
         this.lavaBottomAnimTimer = this.createTileSpriteAnimTimer(this.lavaBottom, 4, 4);
         // Use a render texture game object to prevent gaps between the top and bottom portions of the lava
-        this.lavaRenderTexture = this.add.renderTexture(0, globalGame.config.height, globalGame.config.width, globalGame.config.height).setOrigin(0);
+        this.lavaRenderTexture = this.add.renderTexture(0, globalGame.config.height, globalGame.config.width, globalGame.config.height * 2).setOrigin(0);
         this.lavaRenderTexture.draw(this.lavaTop, 0, 0);
         this.lavaRenderTexture.draw(this.lavaBottom, 0, this.lavaTop.height);
 
@@ -128,7 +128,7 @@ class Play extends Phaser.Scene {
         this.currTimeForLevel = this.baseTimeForLevel;
         this.lavaRisingTweenConfig = {
             from: globalGame.config.height * 1.25,
-            to: this.playerStartPosY + this.playerChar.body.height/4,
+            to: this.playerStartPosY + this.playerChar.body.height/2,
             duration: this.currTimeForLevel,
             ease: Phaser.Math.Easing.Quadratic.Out,
             onUpdate: () => {
@@ -141,7 +141,6 @@ class Play extends Phaser.Scene {
             paused: true
         }
         this.lavaRisingTween = this.tweens.addCounter(this.lavaRisingTweenConfig);
-
 
         // The platforms left to spawn on the current level before the platforms near an enemy are spawned
         this.platformsLeftToSpawnOnCurrLevel = this.calculatePlatformsNeededBeforeCombo(this.platform1BaseWidth, this.baseEnvScrollXVel, this.baseTimeForLevel * (1-this.fractionOfLevelTimeForCombo));
@@ -402,16 +401,6 @@ class Play extends Phaser.Scene {
     // Place key combo
     placeKeyCombo(x, y, comboLength = 4) { // x,y coordinates of where the arrows apear horizontally
         //add sprites to the scene
-        /*
-        this.Arrow1 = new KeyComboArrow(this, x, y, 'promtedArrow', 0); // dont set origin to (0,0) or rotation wont work properly
-        this.Arrow1.rotateArrow();
-        this.Arrow2 = new KeyComboArrow(this, x + this.Arrow1.width + this.Arrow1.width/15, y, 'promtedArrow', 0);
-        this.Arrow2.rotateArrow();
-        this.Arrow3 = new KeyComboArrow(this, x + (this.Arrow1.width*2) + (this.Arrow1.width/15)*2, y, 'promtedArrow', 0);
-        this.Arrow3.rotateArrow();
-        this.Arrow4 = new KeyComboArrow(this, x + (this.Arrow1.width*3) + (this.Arrow1.width/15)*3, y, 'promtedArrow', 0);
-        this.Arrow4.rotateArrow();
-        */
         this.keyComboArrows = [];
         let arrowWidth = this.textures.get("promtedArrow").getSourceImage().width;
         for (let i = 0; i < comboLength; i++) {
@@ -426,7 +415,7 @@ class Play extends Phaser.Scene {
         this.keyComboArrows.forEach((arrow) => {arrow.x += xOffset;});
 
         // create a keycombo based on the current orientation of the randomly rotated keys
-        let keyComboNeeded = this.input.keyboard.createCombo(Array.from(this.keyComboArrows, a => a.getDirection()), {
+        this.keyComboNeeded = this.input.keyboard.createCombo(Array.from(this.keyComboArrows, a => a.getDirection()), {
             resetOnWrongKey: true,  // if they press the wrong key is the combo reset?
             maxKeyDelay: 0,         // max delay (ms) between each key press (0 = disabled)
             deleteOnMatch: true    // if combo matches, will it delete itself?
@@ -438,7 +427,7 @@ class Play extends Phaser.Scene {
             callback: () => {
                 if (this.gameplayRunning ==true){
                     for (let i = 0; i < this.keyComboArrows.length; i++) {
-                        if (i < keyComboNeeded.index) {
+                        if (i < this.keyComboNeeded.index) {
                             this.keyComboArrows[i].changeToPassingSprite();
                         }
                         else {
@@ -452,7 +441,7 @@ class Play extends Phaser.Scene {
 
         // watch for keycombomatches
         this.input.keyboard.on('keycombomatch', (combo, event) => {
-            if (combo === keyComboNeeded && this.gameplayRunning == true) { 
+            if (combo === this.keyComboNeeded && this.gameplayRunning == true) { 
                 console.log('change arrow sprites to their passed sprite')
                 this.keyComboArrows.forEach((arrow) => arrow.changeToPassingSprite());
 
@@ -647,6 +636,22 @@ class Play extends Phaser.Scene {
         let losingAnimTime = this.playerChar.playLossAnim();
         this.scene.launch("gameOverScene");
         this.gameplayRunning = false;
+        
+        this.keyComboArrows.forEach((arrow) => {arrow.destroy();});
+        this.keyComboNeeded.destroy();
+        // Make the lava rise at the end of the game
+        let lavaEndGameTween = this.tweens.addCounter(
+            {
+            from: this.lavaRenderTexture.y,
+            to: -globalGame.config.height/2,
+            duration: 10 * 1000,
+            ease: Phaser.Math.Easing.Quadratic.InOut,
+            
+            onUpdate: () => {
+                this.lavaRenderTexture.y = lavaEndGameTween.getValue();
+            },
+            }
+        );
         this.time.delayedCall(losingAnimTime,
             () => {
                 // COMPLETE THIS

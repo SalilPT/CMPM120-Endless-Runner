@@ -6,7 +6,9 @@ class Scorekeeper extends Phaser.GameObjects.Text {
             fontFamily: "JebFont",
             fontSize: "large",
             color: "white",
-            align: "left"
+            align: "left",
+            stroke: '#000000',
+            strokeThickness: 2,
         }
         this.setStyle(this.textStyleConfig);
         
