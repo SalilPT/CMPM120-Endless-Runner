@@ -183,23 +183,8 @@ class Play extends Phaser.Scene {
         };
         this.playerAndPlatformCollider.collideCallback = this.defaultPlayerPlatColliderCallback;
 
-
-
-
-
-
-        // TEMPORARY STUFF
-        console.log("playScene started");
-        this.input.setGlobalTopOnly(true);
-        
-        this.input.keyboard.on("keydown-D", () => {console.log("D"); this.currEnvScrollXVel -= 10});
-        this.input.keyboard.on("keydown-A", () => {console.log("A"); this.currEnvScrollXVel += 10});
-        //this.input.keyboard.on("keydown-UP", () => {
-        //    console.log("UP");})
-        this.input.keyboard.on("keydown-DOWN", () => {
-            console.log("DOWN");
-        });
-        
+        // Background Music
+        this.backgroundMusic = this.sound.add("backgroundMusic");
     }
 
     update() {
@@ -631,6 +616,9 @@ class Play extends Phaser.Scene {
         this.setKeyComboPlacementTimer(this.currTimeForLevel * (1-this.fractionOfLevelTimeForCombo));
 
         this.scorekeeper.setVisible(true);
+
+        this.backgroundMusic.play({loop: true});
+
         this.gameplayRunning = true;
     }
 
@@ -642,8 +630,7 @@ class Play extends Phaser.Scene {
         this.keyComboArrows.forEach((arrow) => {arrow.destroy();});
         this.keyComboNeeded.destroy();
         // Make the lava rise at the end of the game
-        let lavaEndGameTween = this.tweens.addCounter(
-            {
+        let lavaEndGameTween = this.tweens.addCounter({
             from: this.lavaRenderTexture.y,
             to: -globalGame.config.height/2,
             duration: 10 * 1000,
@@ -652,8 +639,20 @@ class Play extends Phaser.Scene {
             onUpdate: () => {
                 this.lavaRenderTexture.y = lavaEndGameTween.getValue();
             },
+        });
+        
+        let backgroundMusicFadeOutTween = this.tweens.addCounter({
+            from: 1,
+            to: 0,
+            duration: 1 * 1000,
+            ease: Phaser.Math.Easing.Quadratic.InOut,
+            onUpdate: () => {
+                this.backgroundMusic.setVolume(backgroundMusicFadeOutTween.getValue());
+            },
+            onComplete: () => {
+                this.backgroundMusic.stop();
             }
-        );
+        });
         this.time.delayedCall(losingAnimTime,
             () => {
                 // COMPLETE THIS

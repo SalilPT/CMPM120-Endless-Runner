@@ -40,6 +40,8 @@ class Menu extends Phaser.Scene {
         this.load.audio('globlinDeath2', './assets/audio/Globlin Death 2.wav');
         this.load.audio('globlinDeath3', './assets/audio/Globlin Death 3.wav');
         this.load.audio('buttonSound', './assets/audio/Button Sound.wav');
+
+        this.load.audio('backgroundMusic', './assets/audio/An Infernal Dash (Volume Adjusted).mp3');
     }
 
     create() {       
