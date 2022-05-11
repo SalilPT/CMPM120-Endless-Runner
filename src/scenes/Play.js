@@ -26,13 +26,13 @@ class Play extends Phaser.Scene {
         // Variables for game balancing
         this.currLevel = 1;
         this.baseTimeForLevel = 10000;
-        this.minTimeForLevel = 4000;
-        this.levelDifficultyScale = 1.25;
+        this.minTimeForLevel = 3600;
+        this.levelDifficultyScale = 1.15; // Value greater than 1
         this.fractionOfLevelTimeForCombo = (3/8);
 
         this.baseEnvScrollXVel = -192;
         this.maxEnvScrollXVel = -1600;
-        this.envScrollXVelIncrement = -32;
+        this.envScrollXVelIncrement = -16;
         //////////
         this.gameplayRunning = false;
         this.platformSpawnRightThreshold = globalGame.config.width + this.textures.get("platform1").getSourceImage().width;
@@ -127,7 +127,7 @@ class Play extends Phaser.Scene {
         // Variables to handle the lava
         this.currTimeForLevel = this.baseTimeForLevel;
         this.lavaRisingTweenConfig = {
-            from: globalGame.config.height * 1.25,
+            from: globalGame.config.height * 1.15,
             to: this.playerStartPosY + this.playerChar.body.height/2,
             duration: this.currTimeForLevel,
             ease: Phaser.Math.Easing.Quadratic.Out,
@@ -491,7 +491,6 @@ class Play extends Phaser.Scene {
     playJumpingToNextLevelAnim() {
         
         //this.platformsLeftToSpawnOnCurrLevel = Infinity;
-
         // Don't let lava rise anymore
         this.lavaRisingTween.pause();
         // Define a collider callback function for once the player lands on the next level and remove it after the player lands
@@ -534,7 +533,7 @@ class Play extends Phaser.Scene {
                 this.collectibleGroup.incY(heightDiff);
         
                 this.myBackground.tilePositionY -= heightDiff;
-                this.currLevel += 1;
+                
                 this.resetLavaForNextLevel();
 
                 let platformsNeeded = this.calculatePlatformsNeededBeforeCombo(this.platform1BaseWidth, this.currEnvScrollXVel, this.currTimeForLevel * (1-this.fractionOfLevelTimeForCombo));
@@ -562,6 +561,8 @@ class Play extends Phaser.Scene {
         this.time.delayedCall(
             2000,
             () => {
+                // Update current level
+                this.currLevel += 1;
                 this.currEnvScrollXVel = Math.max(this.baseEnvScrollXVel + this.envScrollXVelIncrement * this.currLevel, this.maxEnvScrollXVel);
                 this.playerChar.playJumpingAnim();
                 this.playerChar.setVelocityY(-600);
@@ -582,6 +583,9 @@ class Play extends Phaser.Scene {
         let denominator = 1 + Math.pow(this.levelDifficultyScale, this.currLevel - 1);
         this.currTimeForLevel = (numerator / denominator) + this.minTimeForLevel;
         this.lavaRisingTweenConfig.duration = this.currTimeForLevel;
+        
+        console.log("New time for level: ", this.currTimeForLevel);
+        console.log("New time for combo: " + this.currTimeForLevel * this.fractionOfLevelTimeForCombo);
 
         this.lavaRisingTween = this.tweens.addCounter(this.lavaRisingTweenConfig);
         this.lavaRisingTween.play();
