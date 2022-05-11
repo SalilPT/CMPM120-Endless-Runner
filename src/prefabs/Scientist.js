@@ -43,10 +43,11 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
         this.jumpArr = [];
         this.jumpSound1 = this.scene.sound.add('jebJump1');
         this.jumpSound2 = this.scene.sound.add('jebJump2');
-        this.jebDeathSound = this.scene.sound.add('jebDeath');
-        this.laserSound = this.scene.sound.add('jebLaser');
         this.jumpArr.push(this.jumpSound1);
         this.jumpArr.push(this.jumpSound2);
+        
+        this.jebDeathSound = this.scene.sound.add('jebDeath');
+        this.laserSound = this.scene.sound.add('jebLaser');
     }
 
     update() {

@@ -290,6 +290,7 @@ class Play extends Phaser.Scene {
             platformToSpawn = this.platformPool.getFirst();
             platformToSpawn.setActive(true);
             platformToSpawn.setVisible(true);
+            platformToSpawn.setTexture("platform1");
             
             this.platformPool.remove(platformToSpawn);
         }
@@ -384,6 +385,10 @@ class Play extends Phaser.Scene {
         this.encounterActive = true;
         this.spawnEmptyStretchOfPlatforms(this.numPlatformsInEmptyStretch * this.platform1BaseWidth + 1);
         this.platformSpawnYCoord -= this.nextLevelHeightIncrement;
+
+        // Spawn the first platform of the next level and specifitcally set its texture
+        let firstPlatformOfNextLevel = this.spawnPlatform(this.getPhysBounds(this.rightmostPlatform).right, this.platformSpawnYCoord, false);
+        firstPlatformOfNextLevel.setTexture("platformLeft");
     }
 
     // Place key combo
@@ -430,7 +435,10 @@ class Play extends Phaser.Scene {
         // watch for keycombomatches
         this.input.keyboard.on('keycombomatch', (combo, event) => {
             if (combo === this.keyComboNeeded && this.gameplayRunning == true) { 
-                console.log('change arrow sprites to their passed sprite')
+                console.log('change arrow sprites to their passed sprite');
+                // Prevent having multiple listeners for key combos
+                this.input.keyboard.removeListener("keycombomatch");
+
                 this.keyComboArrows.forEach((arrow) => arrow.changeToPassingSprite());
 
                 this.scorekeeper.addScoreForLevelIncrease(this.currLevel);
@@ -452,6 +460,9 @@ class Play extends Phaser.Scene {
             this.spawnPlatform(this.getPhysBounds(this.rightmostPlatform).right, this.platformSpawnYCoord);
         }
         this.enemyTriggerPlatform = this.spawnPlatform(this.getPhysBounds(this.rightmostPlatform).right, this.platformSpawnYCoord);
+
+        // Set texture on enemy trigger platform
+        this.enemyTriggerPlatform.setTexture("platformRight");
         this.globlinSprite.x = this.getPhysBounds(this.rightmostPlatform).right - this.platform1BaseWidth/1.7;
         this.globlinSprite.playIdleAnim();
         // REMOVE THIS LATER
@@ -461,6 +472,11 @@ class Play extends Phaser.Scene {
     // Create the platforms at the start of the game
     createStartingPlatforms(startingXCoord) {
         let currX = startingXCoord;
+        // Spawn first platform with different texture
+        let firstPlatform = this.spawnPlatform(currX, this.platformSpawnYCoord);
+        firstPlatform.setTexture("platformLeft");
+        currX = this.getPhysBounds(firstPlatform).right;
+
         while (true) {
             let newPlatform = this.spawnPlatform(currX, this.platformSpawnYCoord);
             currX = this.getPhysBounds(newPlatform).right;
@@ -538,7 +554,7 @@ class Play extends Phaser.Scene {
         };
 
         // Play an animation of defeating enemy and then make player character jump
-        console.log('jeb fires laser')
+        console.log('jeb fires laser');
         this.playerChar.playAttackObstacleAnim();
         this.time.delayedCall(900, ()=> {
             this.globlinSprite.playDeathAnim();

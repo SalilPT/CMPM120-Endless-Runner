@@ -16,13 +16,15 @@ class Menu extends Phaser.Scene {
         this.load.spritesheet("lavaBottom", "./assets/Lava Bottom Spritesheet (4 frames).png", {frameWidth: 512/4, frameHeight: 64});
         // Load assets for Platforms and Scientist
         this.load.image("platform1", "./assets/Rock Platform 1 (Shadow)(128x74).png");
-        this.load.image("laser", "./assets/Jeb laserbeam 64W x 78H.png");
+        this.load.image("platformLeft", "./assets/Rock Platform End Left (128x74).png");
+        this.load.image("platformRight", "./assets/Rock Platform End Right (128x74).png");
         
         this.load.spritesheet("jebRunningSpritesheet", "./assets/Jeb running spritesheet 64x78.png", {frameWidth: 64, frameHeight: 78});
         this.load.spritesheet("jebDeathSpritesheet", "./assets/Jeb Death Spritesheet 64x78.png", {frameWidth:64, frameHeight:78});
         this.load.spritesheet("jebIdleSpritesheet", "./assets/Jeb Idle Spritesheet 64x78.png", {frameWidth:64, frameHeight:78});
         this.load.spritesheet("jebJumpingSpritesheet", "./assets/jeb jumping spirtesheet 64W x 78H.png", {frameWidth:64, frameHeight:78});
         this.load.spritesheet("jebAttackSpritesheet", "./assets/Jeb Attack Spritesheet 64W x 78H.png", {frameWidth:64, frameHeight:78});
+        this.load.image("laser", "./assets/Jeb laserbeam 64W x 78H.png");
         //atlas loading
         this.load.atlas("globlinAtlas", './assets/globlin.png', "./assets/globlin_atlas.json");
 
