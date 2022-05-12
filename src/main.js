@@ -45,7 +45,6 @@ let globalGameConfig = {
             debug: false
         }
     },
-    //scene: [Menu, Credits, Play]
     scene: [Menu, Play, Credits, GameOver]
 }
 

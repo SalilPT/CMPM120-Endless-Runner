@@ -5,7 +5,6 @@ class GameOver extends Phaser.Scene {
 
     create() {
         this.scene.bringToTop();
-        console.log("started the gameOverScene");
         let creditsConfig = {
             fontFamily: 'jebFont',
             fontSize: '18px',
@@ -28,7 +27,6 @@ class GameOver extends Phaser.Scene {
         this.resetButton.on("pointerdown", () => {
             globalGame.sound.stopAll(); // Stop all audio
             this.sound.play('buttonSound');
-            console.log("Clicked on resetButton in  gameoverscene");
             this.scene.sleep(); // Prevent multiple background timers from being launched. Currently this restarts the background. TODO: Fix this
             this.scene.wake("menuScene");
             this.scene.stop("playScene");
