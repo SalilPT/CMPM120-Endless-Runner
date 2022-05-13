@@ -111,7 +111,7 @@ class Play extends Phaser.Scene {
             // Normally, checking whether or not a character is on ground like this would be bad.
             // But here, it works.
             if ((this.playerChar.body.y + this.playerChar.body.halfHeight) == this.playerStartPosY
-            && !this.obstacleInRange) {
+            && !this.obstacleInRange && this.gameplayRunning) {
                 this.playerChar.playJumpingAnim()
                 this.playerChar.body.setVelocityY(-400);
             }
