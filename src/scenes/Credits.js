@@ -3,12 +3,6 @@ class Credits extends Phaser.Scene {
         super("creditsScene");
     }
 
-    init() {
-
-    }
-    preload() {
-    }
-
     create() {
         console.log("started the credits scene")
         this.myBackground = this.add.tileSprite(0, -globalGame.config.height, globalGame.config.width, globalGame.config.height*2, "volcanicBackground").setOrigin(0);
@@ -38,7 +32,6 @@ class Credits extends Phaser.Scene {
         this.titleButton.on("pointerdown", () => {
             this.sound.play('buttonSound');
             console.log("Clicked on titleButton in Credits scene");
-            //this.scene.sleep("creditsScene")
             this.scene.stop(); // Prevent multiple background timers from being launched. Currently this restarts the background. TODO: Fix this
             this.scene.wake("menuScene");
             this.scene.wake("playScene");
@@ -46,7 +39,7 @@ class Credits extends Phaser.Scene {
 
         // Assign event to transition back to menu
     }
-        // Function to create timer to animate tileSprite Game Objects
+    // Function to create timer to animate tileSprite Game Objects
     // Returns a reference to the newly added timer
     createTileSpriteAnimTimer(obj, numTotalAnimFrames, fps = 4) {
         let newTimer;

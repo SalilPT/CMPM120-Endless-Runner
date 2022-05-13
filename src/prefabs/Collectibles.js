@@ -30,10 +30,6 @@ class Collectibles extends Phaser.Physics.Arcade.Sprite {
             ease: Phaser.Math.Easing.Quadratic.Out,
             duration: 120,
             onComplete: () => {this.destroy();}, // Destroy self
-        })
-        // Particles?
-
-        
-
+        });
     }
 }

@@ -3,10 +3,6 @@ class Menu extends Phaser.Scene {
         super("menuScene");
     }
 
-    init() {
-
-    }
-
     preload() {
         //load title
         this.load.image("title", "./assets/Title.png");
@@ -20,10 +16,10 @@ class Menu extends Phaser.Scene {
         this.load.image("platformRight", "./assets/Rock Platform End Right (128x74).png");
         
         this.load.spritesheet("jebRunningSpritesheet", "./assets/Jeb running spritesheet 64x78.png", {frameWidth: 64, frameHeight: 78});
-        this.load.spritesheet("jebDeathSpritesheet", "./assets/Jeb Death Spritesheet 64x78.png", {frameWidth:64, frameHeight:78});
-        this.load.spritesheet("jebIdleSpritesheet", "./assets/Jeb Idle Spritesheet 64x78.png", {frameWidth:64, frameHeight:78});
-        this.load.spritesheet("jebJumpingSpritesheet", "./assets/jeb jumping spirtesheet 64W x 78H.png", {frameWidth:64, frameHeight:78});
-        this.load.spritesheet("jebAttackSpritesheet", "./assets/Jeb Attack Spritesheet 64W x 78H.png", {frameWidth:64, frameHeight:78});
+        this.load.spritesheet("jebDeathSpritesheet", "./assets/Jeb Death Spritesheet 64x78.png", {frameWidth: 64, frameHeight: 78});
+        this.load.spritesheet("jebIdleSpritesheet", "./assets/Jeb Idle Spritesheet 64x78.png", {frameWidth: 64, frameHeight: 78});
+        this.load.spritesheet("jebJumpingSpritesheet", "./assets/jeb jumping spirtesheet 64W x 78H.png", {frameWidth: 64, frameHeight: 78});
+        this.load.spritesheet("jebAttackSpritesheet", "./assets/Jeb Attack Spritesheet 64W x 78H.png", {frameWidth: 64, frameHeight: 78});
         this.load.image("laser", "./assets/Jeb laserbeam 64W x 78H.png");
         //atlas loading
         this.load.atlas("globlinAtlas", './assets/globlin.png', "./assets/globlin_atlas.json");
@@ -85,13 +81,12 @@ class Menu extends Phaser.Scene {
         menuConfig.color = '#ff9933'
         menuConfig.fontSize = 12;
         this.add.text(globalGame.config.width/4.5, globalGame.config.height/1.10, 'CONTROLS:\nUP KEY TO JUMP\nARROW KEYS WHEN PROMPTED', menuConfig).setOrigin(0.5);
-        
+
         // put menu scene to the top of screen
         this.scene.bringToTop();
         // playButton functionality
         this.playButton.on("pointerdown", () => {
             this.sound.play('buttonSound');
-            console.log("Clicked on playButton in Menu scene");
             this.scene.sleep("menuScene")
             // start the game
             this.scene.get("playScene").startGameplay();
@@ -99,7 +94,6 @@ class Menu extends Phaser.Scene {
         //creditsButton functionality
         this.creditsButton.on("pointerdown", () => {
             this.sound.play('buttonSound')
-            console.log("Clicked on creditsButton in Menu scene");
             this.scene.sleep("menuScene");
             this.scene.sleep("playScene");
             // start the game
@@ -112,12 +106,6 @@ class Menu extends Phaser.Scene {
         downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        // Play background music
-
     }
-
-    update() {
-        
-    }
-    
+  
 }

@@ -23,7 +23,6 @@ class KeyComboArrow extends Phaser.GameObjects.Sprite {
 
     // returns the correspoding key input based on the rotation of the arrow
     getDirection() {
-        console.log(this.angle);
         if (this.angle == 0){
             return upKey;
         } else if (this.angle == 90) {
