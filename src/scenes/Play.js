@@ -185,7 +185,7 @@ class Play extends Phaser.Scene {
     update() {
         // keeps track of when to play running animation
         if ((this.playerChar.body.y + this.playerChar.body.halfHeight) == this.playerStartPosY
-        && this.currEnvScrollXVel < 0){
+        && this.currEnvScrollXVel < 0 && !this.obstacleInRange){
             this.playerChar.playRunningAnim();
         }
 
@@ -200,20 +200,9 @@ class Play extends Phaser.Scene {
         if (this.encounterActive) {
             if (this.getPhysBounds(this.enemyTriggerPlatform).x - this.getPhysBounds(this.playerChar).right <= this.platform1BaseWidth/2
             && !this.obstacleInRange) {
-                //this.currEnvScrollXVel = 0;
                 this.obstacleInRange = true;
-                this.playerChar.playIdleAnim();                
+                this.playerChar.playIdleAnim();
 
-                /*
-                // TRY TO SLOW DOWN PLATFORMS AS PLAYER APPOACHES ENEMY
-                this.tweens.addCounter({
-                    target: this.enemyTriggerPlatform.body.x,
-                    start: this.enemyTriggerPlatform.body.x,
-                    end: 0,
-                    duration: 1000,
-                    onStart: () => {console.log("AAA");}
-                });
-                */
                 // Slow down the player character over time
                 // Use a kinematics equation (with no acceleration) to determine the duration value needed to have the player character stop at platform before enemy trigger platform
                 // This technically isn't perfect because the deceleration happens in steps, but the small differences between actual and intended positions won't be that important.
@@ -228,7 +217,7 @@ class Play extends Phaser.Scene {
                     from: this.currEnvScrollXVel,
                     to: 0,
                     duration: timeToSlowDown,
-                    onUpdate: () => {this.currEnvScrollXVel = this.encounterSlowdownTween.getValue()}
+                    onUpdate: () => {this.currEnvScrollXVel = this.encounterSlowdownTween.getValue();}
                 });
             }
             // Spawn the platforms of the next level
@@ -415,6 +404,7 @@ class Play extends Phaser.Scene {
                 this.scorekeeper.addScoreForLevelIncrease(this.currLevel);
                 this.playJumpingToNextLevelAnim();
 
+                this.time.removeEvent(keyComboUpdateTimer);
                 keyComboUpdateTimer.destroy();
                 // When matched, delete the arrows after one second
                 this.time.delayedCall(1000, () => {
@@ -434,7 +424,8 @@ class Play extends Phaser.Scene {
 
         // Set texture on enemy trigger platform
         this.enemyTriggerPlatform.setTexture("platformRight");
-        this.globlinSprite.x = this.getPhysBounds(this.rightmostPlatform).right - this.platform1BaseWidth/1.7;
+
+        this.globlinSprite.body.reset(this.getPhysBounds(this.enemyTriggerPlatform).x + this.platform1BaseWidth/2, this.globlinSprite.y);
         this.globlinSprite.playIdleAnim();
     }
 
@@ -515,7 +506,7 @@ class Play extends Phaser.Scene {
 
         // Play an animation of defeating enemy and then make player character jump
         this.playerChar.playAttackObstacleAnim();
-        this.time.delayedCall(900, ()=> {
+        this.time.delayedCall(950, ()=> {
             this.globlinSprite.playDeathAnim();
         });
         this.time.delayedCall(

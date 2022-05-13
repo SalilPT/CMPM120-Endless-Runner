@@ -50,17 +50,8 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
         this.laserSound = this.scene.sound.add('jebLaser');
     }
 
-    update() {
-
-    }
-
     playIdleAnim(){
         this.anims.play("jebIdle", 1);
-    }
-
-    // Play the background animation for the scientist when the menu is still visible
-    playMenuBackgroundAnim() {
-
     }
 
     // Play running animation
@@ -85,24 +76,21 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
     playAttackObstacleAnim() {
         this.anims.play("jebAttack");
         this.laserSound.play({rate:2, detune:-1200});
-        this.scene.time.delayedCall(850, ()=> {
-            this.laserBeam = this.scene.physics.add.sprite(this.scene.playerChar.x, this.scene.playerStartPosY, "laser", 0);;
-            for (let i = 0; i < 10; i++) {
-                this.laserBeam.setVelocityX(350);
-            }
-            if (this.laserBeam.x > globalGameConfig.width){
-                this.laserBeam.destroy();
-            }
+        this.scene.time.delayedCall(850, () => {
+            this.laserBeam = this.scene.physics.add.sprite(this.scene.playerChar.x, this.scene.playerStartPosY, "laser", 0);
+            this.laserBeam.setVelocityX(350);
+            // Periodically check if the spawned laser is out of bounds. If so, destroy it.
+            let laserOutOfBoundsCheckTimer = this.scene.time.addEvent({
+                delay: (1000/60)*4,
+                callback: () => {
+                    if (this.laserBeam.x > globalGame.config.width) {
+                        this.laserBeam.destroy();
+                        this.scene.time.removeEvent(laserOutOfBoundsCheckTimer);
+                        laserOutOfBoundsCheckTimer.destroy();
+                    }
+                },
+                loop: true
+            });
         });
-
-    }
-
-    playFailedAttackObstacleAnim() {
-
-    }
-
-    // Play animation for when the player collects something
-    playCollectingAnim() {
-
     }
 }
