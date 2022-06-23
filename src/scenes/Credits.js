@@ -27,9 +27,10 @@ class Credits extends Phaser.Scene {
         //show title button
         this.titleButton = this.add.sprite(globalGameConfig.width/8, globalGameConfig.height/1.15, "creditsButton");
         this.add.text(globalGameConfig.width/8, globalGameConfig.height/1.15,'BACK', creditsConfig).setOrigin(.5);
-        this.titleButton.setInteractive();
+        this.titleButton.setInteractive({useHandCursor: true});
         //titleButton button functionality
         this.titleButton.on("pointerdown", () => {
+            this.input.manager.canvas.style.cursor = "default"; // Reset cursor icon. Thanks to rexrainbow: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/cursor/
             this.sound.play('buttonSound');
             console.log("Clicked on titleButton in Credits scene");
             this.scene.stop(); // Prevent multiple background timers from being launched. Currently this restarts the background. TODO: Fix this
