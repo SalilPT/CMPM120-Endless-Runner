@@ -139,7 +139,8 @@ class Play extends Phaser.Scene {
         // The platforms left to spawn on the current level before the platforms near an enemy are spawned
         this.platformsLeftToSpawnOnCurrLevel = this.calculatePlatformsNeededBeforeCombo(this.platform1BaseWidth, this.baseEnvScrollXVel, this.baseTimeForLevel * (1-this.fractionOfLevelTimeForCombo));
         this.platformsSpawnedOnNextLevel = 0;
-        this.numPlatformsInEmptyStretch = 2;
+        this.baseNumPlatformsInEmptyStretch = 2;
+        this.numPlatformsInEmptyStretch = this.baseNumPlatformsInEmptyStretch;
 
         this.obstacleInRange = false;
 
@@ -198,7 +199,9 @@ class Play extends Phaser.Scene {
 
         // Slow down player for the encounter and generate platforms on the next level
         if (this.encounterActive) {
-            if (this.getPhysBounds(this.enemyTriggerPlatform).x - this.getPhysBounds(this.playerChar).right <= this.platform1BaseWidth/2
+            // Set the slowdown threshold to half the width of a platform plus the total width of the platforms in the empty stretch, excluding the total width of the base empty stretch platforms
+            let slowdownThreshold = this.platform1BaseWidth/2 + this.platform1BaseWidth * (this.numPlatformsInEmptyStretch - this.baseNumPlatformsInEmptyStretch);
+            if (this.getPhysBounds(this.enemyTriggerPlatform).x - this.getPhysBounds(this.playerChar).right <= slowdownThreshold
             && !this.obstacleInRange) {
                 this.obstacleInRange = true;
                 this.playerChar.playIdleAnim();
@@ -494,7 +497,9 @@ class Play extends Phaser.Scene {
                 this.platformsSpawnedOnNextLevel = 0;
                 this.setKeyComboPlacementTimer(this.currTimeForLevel * (1-this.fractionOfLevelTimeForCombo));
 
-                // TODO: Increase number of platforms in empty stretch
+                // Adjust the number of platforms in empty stretch
+                let platformsPerSecond = -this.currEnvScrollXVel / this.platform1BaseWidth;
+                this.numPlatformsInEmptyStretch = this.baseNumPlatformsInEmptyStretch + Math.floor(platformsPerSecond/4);
 
                 // Encounter no longer active
                 this.encounterActive = false;
@@ -512,6 +517,8 @@ class Play extends Phaser.Scene {
         this.time.delayedCall(
             2000,
             () => {
+                // In case the encounter slowdown tween is somehow still playing, stop it
+                this.encounterSlowdownTween.stop();
                 // Update current level
                 this.currLevel += 1;
                 this.currEnvScrollXVel = Math.max(this.baseEnvScrollXVel + this.envScrollXVelIncrement * this.currLevel, this.maxEnvScrollXVel);
