@@ -5,8 +5,12 @@ class Credits extends Phaser.Scene {
 
     create() {
         console.log("started the credits scene")
-        this.myBackground = this.add.tileSprite(0, -globalGame.config.height, globalGame.config.width, globalGame.config.height*2, "volcanicBackground").setOrigin(0);
-        this.myBackgroundTimer = this.createTileSpriteAnimTimer(this.myBackground, 3, 4);
+        // Bring the Play scene's background tilesprite in front of everything else in the Play scene
+        // This makes it so the background tilesprite becomes the background for the Credits scene
+        let playSceneBackground = this.scene.get("playScene").myBackground;
+        let playSceneBackgroundDepth = playSceneBackground.depth;
+        this.scene.get("playScene").children.bringToTop(playSceneBackground);
+
         // credit text configuration
         let creditsConfig = {
             fontFamily: 'jebFont',
@@ -31,30 +35,13 @@ class Credits extends Phaser.Scene {
         //titleButton button functionality
         this.titleButton.on("pointerdown", () => {
             this.input.manager.canvas.style.cursor = "default"; // Reset cursor icon. Thanks to rexrainbow: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/cursor/
+            playSceneBackground.setDepth(playSceneBackgroundDepth); // Reset depth of Play scene's background to what it was when this scene was started
             this.sound.play('buttonSound');
             console.log("Clicked on titleButton in Credits scene");
             this.scene.stop(); // Prevent multiple background timers from being launched. Currently this restarts the background. TODO: Fix this
             this.scene.wake("menuScene");
-            this.scene.wake("playScene");
         });
 
         // Assign event to transition back to menu
-    }
-    // Function to create timer to animate tileSprite Game Objects
-    // Returns a reference to the newly added timer
-    createTileSpriteAnimTimer(obj, numTotalAnimFrames, fps = 4) {
-        let newTimer;
-        obj.setData("currAnimFrame", 0);
-        newTimer = this.time.addEvent(
-            {
-                delay: 1000/fps,
-                callback: () => {
-                    obj.setData("currAnimFrame", (obj.getData("currAnimFrame") + 1) % numTotalAnimFrames);
-                    obj.setFrame(obj.getData("currAnimFrame"));
-                },
-                loop: true
-            }
-        );
-        return newTimer;
     }
 }

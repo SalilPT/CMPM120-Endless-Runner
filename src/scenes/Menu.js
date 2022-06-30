@@ -98,7 +98,6 @@ class Menu extends Phaser.Scene {
             this.input.manager.canvas.style.cursor = "default"; // Reset cursor icon. Thanks to rexrainbow: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/cursor/
             this.sound.play('buttonSound')
             this.scene.sleep("menuScene");
-            this.scene.sleep("playScene");
             // start the game
             this.scene.launch("creditsScene");
         });

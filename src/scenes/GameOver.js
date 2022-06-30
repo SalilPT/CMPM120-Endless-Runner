@@ -27,7 +27,7 @@ class GameOver extends Phaser.Scene {
         this.resetButton.on("pointerdown", () => {
             globalGame.sound.stopAll(); // Stop all audio
             this.sound.play('buttonSound');
-            this.scene.sleep(); // Prevent multiple background timers from being launched. Currently this restarts the background. TODO: Fix this
+            this.scene.stop();
             this.scene.wake("menuScene");
             this.scene.stop("playScene");
             this.scene.launch("playScene");
