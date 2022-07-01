@@ -16,8 +16,7 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
             frameRate: 12,
             repeat: -1
         });
-        
-        this.losingAnim = this.scene.anims.create({
+        this.scene.anims.create({
             key: "jebLosing",
             frames: this.anims.generateFrameNumbers("jebDeathSpritesheet", {start:0}),
             frameRate: 12,
@@ -38,7 +37,8 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
             frames: this.scene.anims.generateFrameNumbers("jebAttackSpritesheet"),
             frameRate: 14
         });
-        //audios
+
+        // audios
         this.rnd = Phaser.Math.RND;
         this.jumpArr = [];
         this.jumpSound1 = this.scene.sound.add('jebJump1');
@@ -66,11 +66,9 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
     }
 
     // Play the animation for when the player loses
-    // Returns the duration of the animation in ms
     playLossAnim() {
         this.anims.play("jebLosing");
         this.jebDeathSound.play();
-        //return this.losingAnim.duration;
     }
 
     playAttackObstacleAnim() {
@@ -79,6 +77,7 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
         this.scene.time.delayedCall(850, () => {
             this.laserBeam = this.scene.physics.add.sprite(this.scene.playerChar.x, this.scene.playerStartPosY, "laser", 0);
             this.laserBeam.setVelocityX(350);
+
             // Periodically check if the spawned laser is out of bounds. If so, destroy it.
             let laserOutOfBoundsCheckTimer = this.scene.time.addEvent({
                 delay: (1000/60)*4,

@@ -35,8 +35,8 @@ class KeyComboArrow extends Phaser.GameObjects.Sprite {
     }
 
     // change the sprite to indicate the arrow in the combo was guessed correctly
-    changeToPassingSprite(){
-        this.setTexture('passedArrow',0);
+    changeToPassingSprite() {
+        this.setTexture('passedArrow', 0);
     }
 
     // Change arrow's sprite texture back to what it was originally

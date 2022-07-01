@@ -18,11 +18,13 @@ class GameOver extends Phaser.Scene {
             },
             fixedWidth: 0
         }
-        //set text
+
+        // set text
         this.add.text(globalGame.config.width/2, globalGame.config.height/3, 'GAME OVER', creditsConfig).setOrigin(0.5);
         this.resetButton = this.add.sprite(globalGameConfig.width/8, globalGameConfig.height/1.15, "creditsButton");
         this.add.text(globalGameConfig.width/8, globalGameConfig.height/1.15,'RESET', creditsConfig).setOrigin(.5);
-        //button functionality
+
+        // button functionality
         this.resetButton.setInteractive({useHandCursor: true});
         this.resetButton.on("pointerdown", () => {
             globalGame.sound.stopAll(); // Stop all audio

@@ -1,17 +1,16 @@
 class Collectibles extends Phaser.Physics.Arcade.Sprite {
     // params is an object whose fields are the parameters
     constructor(params) {
-        super(params.scene, params.x, params.y, params.texture, params.frame,);
+        super(params.scene, params.x, params.y, params.texture, params.frame);
         params.scene.add.existing(this);
         params.scene.physics.add.existing(this);
-        this.spawnPoint = params.x;
-        this.scene = params.scene;
+
         this.body.setMass(0);
         this.angle = Phaser.Math.Between(-15, 15);
     }
 
     update() {
-        this.setVelocityX(this.scene.currEnvScrollXVel)
+        this.setVelocityX(this.scene.currEnvScrollXVel);
         if (this.x <= 0 - this.width) {
             this.destroy();
         }
@@ -21,7 +20,8 @@ class Collectibles extends Phaser.Physics.Arcade.Sprite {
     handleCollisionWithPlayer() {
         // Prevent multiple unintended calls to this method
         this.body.checkCollision.none = true;
-        this.scene.sound.play('itemPickup', {detune: (Math.floor(Math.random() * 50)) - 50})
+        this.scene.sound.play('itemPickup', {detune: (Math.floor(Math.random() * 50)) - 50});
+
         // Play small animation
         this.scene.tweens.add({
             targets: this,
