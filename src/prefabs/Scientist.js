@@ -19,7 +19,7 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
         this.scene.anims.create({
             key: "jebLosing",
             frames: this.anims.generateFrameNumbers("jebDeathSpritesheet", {start:0}),
-            frameRate: 12,
+            frameRate: 12
         });
         this.scene.anims.create({
             key: "jebIdle",
@@ -73,7 +73,7 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
 
     playAttackObstacleAnim() {
         this.anims.play("jebAttack");
-        this.laserSound.play({rate:2, detune:-1200});
+        this.laserSound.play({rate: 2, detune: -1200});
         this.scene.time.delayedCall(850, () => {
             this.laserBeam = this.scene.physics.add.sprite(this.scene.playerChar.x, this.scene.playerStartPosY, "laser", 0);
             this.laserBeam.setVelocityX(350);

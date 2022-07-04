@@ -8,7 +8,7 @@ Gustavo Cruz Martinez
 Miles Katlin
 Salil Tantamjarik
 
-Date Completed: June 30, 2022
+Date Completed: July 4, 2022
 
 Game Title: "Jeb's Infernal Escape"
 
@@ -45,7 +45,20 @@ let globalGameConfig = {
             debug: false
         }
     },
-    scene: [Menu, Play, Credits, GameOver]
+    scene: [Menu, Play, Credits, GameOver],
+    render: {
+        // This game uses pixel art graphics
+        pixelArt: true,
+        antialias: false,
+        antialiasGL: false
+    },
+    scale: {
+        width: 640,
+        height: 360,
+        min: {width: 640, height: 360},
+        autoCenter: Phaser.Scale.Center.CENTER_HEIGHT,
+        mode: Phaser.Scale.ScaleModes.FIT
+    }
 }
 
 let globalGame = new Phaser.Game(globalGameConfig);

@@ -58,6 +58,7 @@ class Menu extends Phaser.Scene {
                 top: 5,
                 bottom: 5,
             },
+            resolution: 8
         }
 
         // set up title sprite

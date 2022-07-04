@@ -9,6 +9,7 @@ class Scorekeeper extends Phaser.GameObjects.Text {
             align: "left",
             stroke: '#000000',
             strokeThickness: 2,
+            resolution: 8
         }
         this.setStyle(this.textStyleConfig);
         

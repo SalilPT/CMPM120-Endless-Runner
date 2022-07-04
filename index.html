@@ -8,11 +8,6 @@
     <!-- loading custom fonts came from https://www.webtips.dev/webtips/phaser/custom-fonts-in-phaser3 
     and https://phaser.discourse.group/t/loading-fonts-in-phaser-3-not-working/8898/3-->
     <style>
-        canvas {
-            display: block;
-            margin: auto;
-        }
-
         @font-face {
             font-family: JebFont;
             src: url('./assets/jebs-infernal-esc-font/jebs-infernal-esc-font.ttf');
@@ -21,6 +16,23 @@
         body {
             background-image: url("./assets/webpage background 256x256.png");
             background-repeat: repeat;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+
+            display: block;
+            margin: auto;
+        }
+
+        canvas {
+            display: block;
+            margin: auto;
+        }
+
+        /* Hide the div element used for jebFont*/
+        div {
+            max-width: 0;
+            max-height: 0;
         }
 
     </style>

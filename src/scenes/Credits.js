@@ -22,7 +22,8 @@ class Credits extends Phaser.Scene {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 0
+            fixedWidth: 0,
+            resolution: 8
         }
         
         // show credits text
