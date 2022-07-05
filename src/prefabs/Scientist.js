@@ -80,7 +80,7 @@ class Scientist extends Phaser.Physics.Arcade.Sprite {
 
             // Periodically check if the spawned laser is out of bounds. If so, destroy it.
             let laserOutOfBoundsCheckTimer = this.scene.time.addEvent({
-                delay: (1000/60)*4,
+                delay: (1000/globalGame.loop.targetFps)*4,
                 callback: () => {
                     if (this.laserBeam.x > globalGame.config.width) {
                         this.laserBeam.destroy();
