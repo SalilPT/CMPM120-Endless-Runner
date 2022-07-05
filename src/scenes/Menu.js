@@ -113,7 +113,7 @@ class Menu extends Phaser.Scene {
             this.scene.launch("creditsScene");
         });
 
-        // launch the playScene in parallel to the menut scene
+        // launch the playScene in parallel to the menu scene
         this.scene.launch("playScene");
 
         // Assign events for when buttons are clicked

@@ -4,8 +4,8 @@ class Credits extends Phaser.Scene {
     }
 
     create() {
-        // Bring the Play scene's background tilesprite in front of everything else in the Play scene
-        // This makes it so the background tilesprite becomes the background for the Credits scene
+        // Bring the Play scene's background TileSprite in front of everything else in the Play scene
+        // This makes it so the background TileSprite becomes the background for the Credits scene
         let playSceneBackground = this.scene.get("playScene").myBackground;
         let playSceneBackgroundDepth = playSceneBackground.depth;
         this.scene.get("playScene").children.bringToTop(playSceneBackground);
@@ -37,7 +37,7 @@ class Credits extends Phaser.Scene {
             this.input.manager.canvas.style.cursor = "default"; // Reset cursor icon. Thanks to rexrainbow: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/cursor/
             playSceneBackground.setDepth(playSceneBackgroundDepth); // Reset depth of Play scene's background to what it was when this scene was started
             this.sound.play('buttonSound');
-            this.scene.stop(); // Prevent multiple background timers from being launched. Currently this restarts the background. TODO: Fix this
+            this.scene.stop();
             this.scene.wake("menuScene");
         });
     }

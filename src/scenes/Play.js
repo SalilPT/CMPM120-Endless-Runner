@@ -55,7 +55,7 @@ class Play extends Phaser.Scene {
         // The current scrolling speed of the environment 
         this.currEnvScrollXVel = 0;
 
-        // Place tile sprites
+        // Place TileSprites
         this.myBackground = this.add.tileSprite(0, -globalGame.config.height, globalGame.config.width, globalGame.config.height*2, "volcanicBackground").setOrigin(0);
         this.myBackgroundTimer = this.createTileSpriteAnimTimer(this.myBackground, 3, 4);
         this.lavaTop = this.add.tileSprite(0, globalGame.config.height, globalGame.config.width, 50, "lavaTop", 0).setOrigin(0);
@@ -569,7 +569,7 @@ class Play extends Phaser.Scene {
         return dummy_obj;
     }
 
-    // Function to create timer to animate tileSprite Game Objects
+    // Function to create timer to animate TileSprite Game Objects
     // Returns a reference to the newly added timer
     createTileSpriteAnimTimer(obj, numTotalAnimFrames, fps = 4) {
         let newTimer;
