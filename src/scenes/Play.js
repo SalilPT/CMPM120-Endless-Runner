@@ -181,7 +181,7 @@ class Play extends Phaser.Scene {
         this.backgroundMusic.setVolume(0.275);
     }
 
-    update() {
+    update(updateTime, updateDelta) {
         // keeps track of when to play running animation
         if ((this.playerChar.body.y + this.playerChar.body.halfHeight) == this.playerStartPosY
         && this.currEnvScrollXVel < 0 && !this.obstacleInRange) {
@@ -228,9 +228,9 @@ class Play extends Phaser.Scene {
         }
 
         // Update background and lava
-        this.myBackground.tilePositionX -= this.currEnvScrollXVel/60;
-        this.lavaTop.tilePositionX -= this.currEnvScrollXVel/60;
-        this.lavaBottom.tilePositionX -= this.currEnvScrollXVel/60;
+        this.myBackground.tilePositionX -= this.currEnvScrollXVel * (updateDelta/1000);
+        this.lavaTop.tilePositionX -= this.currEnvScrollXVel * (updateDelta/1000);
+        this.lavaBottom.tilePositionX -= this.currEnvScrollXVel * (updateDelta/1000);
 
         this.lavaRenderTexture.clear();
         this.lavaRenderTexture.draw(this.lavaTop, 0, 0);
@@ -381,9 +381,9 @@ class Play extends Phaser.Scene {
             deleteOnMatch: true    // if combo matches, will it delete itself?
         });
 
-        // Update textures of the arrows every 1/60th of a second
+        // Rapidly update the textures of the arrows
         let keyComboUpdateTimer = this.time.addEvent({
-            delay: 1000/60,
+            delay: 1000/globalGame.loop.targetFps,
             callback: () => {
                 if (this.gameplayRunning == true){
                     for (let i = 0; i < this.keyComboArrows.length; i++) {
