@@ -8,11 +8,11 @@ Gustavo Cruz Martinez
 Miles Katlin
 Salil Tantamjarik
 
-Date Completed: May ???, 2022 // TODO: CHANGE THIS
+Date Completed: July 4, 2022
 
 Game Title: "Jeb's Infernal Escape"
 
-Interesting Technical Features: // TODO: add files and line numbers for where these are
+Interesting Technical Features:
 - Used the launch() method run the Menu and Play scenes in parallel
 - Used object pooling for platforms
 - Used a render texture for the lava
@@ -45,7 +45,20 @@ let globalGameConfig = {
             debug: false
         }
     },
-    scene: [Menu, Play, Credits, GameOver]
+    scene: [Menu, Play, Credits, GameOver],
+    render: {
+        // This game uses pixel art graphics
+        pixelArt: true,
+        antialias: false,
+        antialiasGL: false
+    },
+    scale: {
+        width: 640,
+        height: 360,
+        min: {width: 640, height: 360},
+        autoCenter: Phaser.Scale.Center.CENTER_HEIGHT,
+        mode: Phaser.Scale.ScaleModes.FIT
+    }
 }
 
 let globalGame = new Phaser.Game(globalGameConfig);
